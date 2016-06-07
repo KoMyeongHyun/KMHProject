@@ -5,7 +5,7 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{7A2A6060-E4ED-8942-3BC3-D379D19201E4}</ProjectGuid>
+	<ProjectGuid>{06C35FC2-9622-F387-D7CC-D9968D12B5A8}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
@@ -55,7 +55,7 @@
      <None Include="Assets\Standard Assets\Characters\RollerBall\RollerBallGuidelines.txt" />
      <None Include="Assets\HandyHands\readme.txt" />
  <Reference Include="Assembly-UnityScript">
- <HintPath>C:/Users/KoMyeongHyun/Desktop/Proto_type/Library/ScriptAssemblies/Assembly-UnityScript.dll</HintPath>
+ <HintPath>C:/Users/KoMyeongHyun/Desktop/GameProject/trunk/DeepDarkDream/Library/ScriptAssemblies/Assembly-UnityScript.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
@@ -114,9 +114,9 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass-vs.csproj">
-      <Project>{48FBF224-EFC1-4A04-6514-F27BC7110214}</Project>      <Name>Assembly-CSharp-firstpass-vs</Name>    </ProjectReference>
+      <Project>{3979C598-8247-D11C-8BF9-5FB8592F748F}</Project>      <Name>Assembly-CSharp-firstpass-vs</Name>    </ProjectReference>
     <ProjectReference Include="Assembly-CSharp-vs.csproj">
-      <Project>{4E370A2B-E971-242D-6A82-A6CA6E9955E3}</Project>      <Name>Assembly-CSharp-vs</Name>    </ProjectReference>
+      <Project>{F823CB76-4F3B-7550-BBA4-C9765C07BD6B}</Project>      <Name>Assembly-CSharp-vs</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
