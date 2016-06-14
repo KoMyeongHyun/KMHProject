@@ -69,4 +69,13 @@ public class Obstacle : MonoBehaviour
     {
         gameObject.GetComponent<Animation>()[animationName[0]].speed = 1.0f;
     }
+
+    public void OnTriggerStay(Collider col)
+    {
+        if(col.tag == "PlayerOb")
+        {
+            //여기서 플레이어와 충돌 처리하기
+            HitPlayer(GameObject.FindGameObjectWithTag("Player").transform);
+        }
+    }
 }

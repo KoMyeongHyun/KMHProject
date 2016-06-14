@@ -6,6 +6,7 @@ public class StateMachine
 
     private GameObject obj;
     private State curState;
+    public State GetCurState { get { return curState; } }
 
     public StateMachine(GameObject _obj, State _state)
     {

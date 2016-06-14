@@ -48,6 +48,7 @@ public class Inventory : MonoBehaviour
         //hide inven
          transform.position = new Vector3(5000.0f, 5000.0f);
 
+        //singleton 다음 스테이지로 넘어갔을 때 저장 값이 남아있다.
         SoundPool.Instance.AddSoundClip("LockDoor", lockDoor);
         SoundPool.Instance.AddSoundClip("UsedKey", usedKey);
         SoundPool.Instance.AddSoundClip("OpenDoor", openDoor);

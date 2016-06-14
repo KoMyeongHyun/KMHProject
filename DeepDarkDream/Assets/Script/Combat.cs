@@ -10,7 +10,12 @@ public class Combat : State
     private Vector3 objPos;
     private Vector3 tarPos;
 
-    private float attackTime;
+    private int attackCount;
+    public int AttackCount { get { return attackCount; } }
+    public void ProcessAttackCount()
+    {
+        attackCount--;
+    }
 
     public override void Enter(GameObject obj)
     {
@@ -19,37 +24,57 @@ public class Combat : State
 
         monster.NavAgent.ResetPath();
         obj.transform.GetChild(2).GetComponent<ChaseStopRange>().enabled = true;
-
-        attackTime = 0.0f;
+        
+        attackCount = 1;
     }
 
     public override void Execute(GameObject obj)
     {
         CollisionCheck(obj);
 
+        if (monster.Target.GetComponent<UnityStandardAssets.Characters
+            .FirstPerson.FirstPersonController>().Invincible)
+        {
+            //충돌 작업 끝내고 이부분 맨 위로 올릴 것
+            Debug.Log("플레이어 무적임으로 정찰 전환");
+            monster.GetStateMachine.ChangeState(new Guard());
+        }
+
         objPos = obj.transform.position;
         tarPos = monster.Target.position;
-
         distance = Vector3.Distance(objPos, tarPos);
 
         if (distance < 3.0f)
         {
-            //공격
-            monster.NavAgent.ResetPath();
-
             //플레이어를 바라보도록 한다.
             Quaternion look = Quaternion.LookRotation((tarPos - objPos));
-            obj.transform.rotation = Quaternion.Lerp(obj.transform.rotation, look, Time.deltaTime * 10.0f);
+            obj.transform.rotation = Quaternion.Lerp(obj.transform.rotation, look, Time.fixedDeltaTime * 10.0f);
 
-            ani.SetBool("walk", false);
-            ani.SetBool("attack", true);
-            attackTime += Time.deltaTime;
+            //경로 초기화
+            monster.NavAgent.ResetPath();
+
+            //한 번만 공격할 것
+            //attack이 아니면 attack 만들어 주고 공격진행변수true
             
-            if(attackTime > 1.7f)//공격 시간 임시 방편
+            if(ani.GetCurrentAnimatorStateInfo(0).IsName("Attack") == false)
             {
-                attackTime = 0.0f;
-                GameObject.FindGameObjectWithTag("Player").SendMessage("DamagedMentality", 70.0f);
+                ani.SetBool("attack", true);
+                ani.SetBool("walk", false);
+                attackCount = 1;
             }
+
+            //if (attackTime == 0.0f)
+            //{
+            //    ani.SetBool("walk", false);
+            //    ani.SetBool("attack", true);
+            //}
+            //attackTime += Time.fixedDeltaTime;
+
+            //if(attackTime > 1.7f)//공격 시간 임시 방편
+            //{
+            //    attackTime = 0.0f;
+            //    GameObject.FindGameObjectWithTag("Player").SendMessage("DamagedMentality", 70.0f);
+            //}
             return;
         }
         else if(distance > 20.0f)
@@ -57,16 +82,12 @@ public class Combat : State
             Debug.Log("플레이어 너무 멀어서 정찰 상태로 전환");
             monster.GetStateMachine.ChangeState(new Guard());
         }
-        else if (monster.Target.GetComponent<UnityStandardAssets.Characters
-            .FirstPerson.FirstPersonController>().Invincible)
+        
+        if(ani.GetCurrentAnimatorStateInfo(0).IsName("Walk") == false)
         {
-            Debug.Log("플레이어 무적임으로 정찰 전환");
-            monster.GetStateMachine.ChangeState(new Guard());
+            ani.SetBool("attack", false);
+            ani.SetBool("walk", true);
         }
-
-        ani.SetBool("walk", true);
-        ani.SetBool("attack", false);
-        attackTime = 0.0f;
         monster.NavAgent.SetDestination(tarPos);
     }
 
@@ -74,6 +95,8 @@ public class Combat : State
     {
         monster.NavAgent.ResetPath();
         obj.transform.GetChild(2).GetComponent<ChaseStopRange>().enabled = false;
+
+        ani.SetBool("attack", false);
     }
 
     private void CollisionCheck(GameObject obj)
@@ -87,6 +110,8 @@ public class Combat : State
 
     public override void TriggerStay(GameObject obj, Collider col)
     {
+        //만약 공격 애니메이션일 때, PlayerOb와 충돌하면 플레이어 체력 떨구기
+
         if (col.tag == "LanternLight")
         {
             if (Cast(obj, col) == true)

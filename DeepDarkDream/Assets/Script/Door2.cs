@@ -53,6 +53,7 @@ public class Door2 : MonoBehaviour
 
         //방향을 구해야 한다.
         gameObject.GetComponent<Rigidbody>().velocity = transform.right.normalized * dir;
+        //gameObject.GetComponent<Rigidbody>().AddForce(transform.right.normalized * dir * Time.fixedDeltaTime * 5.0f);
 
 
         //기본적으로 현재 상태 쪽 가면 닫혀서 고정되도록
@@ -89,11 +90,16 @@ public class Door2 : MonoBehaviour
             dir = -dir;
             doorState ^= DoorState.CLOSE;
             playerCollision = false;
-            gameObject.GetComponent<Rigidbody>().velocity = transform.right.normalized * dir;
+            //gameObject.GetComponent<Rigidbody>().velocity = transform.right.normalized * dir;
+            //gameObject.GetComponent<Rigidbody>().MovePosition(transform.right.normalized * dir * Time.fixedDeltaTime);
+            
+            //수정 필요, 이해 쫌만더 이해하면 가능할 것 같다
+            gameObject.GetComponent<Rigidbody>().AddForce(transform.right.normalized * dir * Time.fixedDeltaTime);
+            gameObject.GetComponent<Rigidbody>().isKinematic = true;
 
             //플레이어 정지 시킬 것
             //후에 플레이어를 밀어 줘야 한다. 일정시간 밀어주는 코루틴 실행
-//            player.SendMessage("StopAndKnockback", transform.GetChild(0));
+            //            player.SendMessage("StopAndKnockback", transform.GetChild(0));
 
             //gameObject.GetComponent<Rigidbody>().AddForce(a * 30.0f, ForceMode.Impulse);
             //playerCon.Move(transform.right.normalized * (-dir));

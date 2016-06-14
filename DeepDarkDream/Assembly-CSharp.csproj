@@ -73,6 +73,7 @@
      <Compile Include="Assets\Script\LanternLight.cs" />
      <Compile Include="Assets\Script\Mentality.cs" />
      <Compile Include="Assets\Script\Monster.cs" />
+     <Compile Include="Assets\Script\MonsterAttackCheck.cs" />
      <Compile Include="Assets\Script\MoveController.cs" />
      <Compile Include="Assets\Script\NextLevel.cs" />
      <Compile Include="Assets\Script\Obstacle.cs" />

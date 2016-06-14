@@ -148,9 +148,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
         {
             float speed;
             GetInput(out speed);
-            
+
             if (stopBehavior || stopMove)
+            {
                 speed = 0.0f;
+            }
 
             // always move along the camera forward as it is the direction that it being aimed at
             Vector3 desiredMove = transform.forward*m_Input.y + transform.right*m_Input.x;
@@ -425,16 +427,15 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_MouseLook.LookRotation (transform, m_Camera.transform);
         }
 
-
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {
             //문, 몬스터는 밀어버리고 진행하게끔 수정할 것 (문과 몬스터에 rigidbody 심어주고 컨트롤 할 것)
             //장애물에 닿으면 플레이어가 밀려야한다. 위, 아래 떨리지 않고
 
-            if(hit.gameObject.tag == "Obstacle")
-            {
-                hit.gameObject.SendMessage("HitPlayer", transform);
-            }
+            //if(hit.gameObject.tag == "Obstacle")
+            //{
+            //    hit.gameObject.SendMessage("HitPlayer", transform);
+            //}
 
             Rigidbody body = hit.collider.attachedRigidbody;
             //dont move the rigidbody if the character is on top of it
