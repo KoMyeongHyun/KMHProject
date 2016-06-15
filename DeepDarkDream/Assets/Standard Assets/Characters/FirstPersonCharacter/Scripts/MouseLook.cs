@@ -20,17 +20,48 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private Quaternion m_CameraTargetRot;
 
 
+        //private bool wave = false;
+        private float decayTime = 0.85f;
+        private float processDecayTime = 0.0f;
+
         public void Init(Transform character, Transform camera)
         {
             m_CharacterTargetRot = character.localRotation;
             m_CameraTargetRot = camera.localRotation;
+
+            processDecayTime = decayTime;
         }
 
+        public void InitProcessDecayTime()
+        {
+            processDecayTime = 0.0f;
+        }
 
         public void LookRotation(Transform character, Transform camera)
         {
             float yRot = CrossPlatformInputManager.GetAxis("Mouse X") * XSensitivity;
             float xRot = CrossPlatformInputManager.GetAxis("Mouse Y") * YSensitivity;
+
+
+            //if (Input.GetKeyDown(KeyCode.H))
+            //{
+            //    wave = true;
+            //    processDecayTime = 0.0f;
+            //}
+            //if (wave)
+            //{
+            //    processDecayTime += Time.deltaTime;
+            float y = 0.0f;
+            if (processDecayTime < decayTime)
+            {
+                processDecayTime += Time.deltaTime;
+                y = (Mathf.Sin(2.0f * 3.14159f * processDecayTime * 3) * 10.0f +
+                     Mathf.Sin(2.0f * 3.14159f * processDecayTime * 7 + 0.2f) * 5.1f +
+                     Mathf.Sin(2.0f * 3.14159f * processDecayTime * 15 + 0.5f) * 1.1f) * (decayTime - processDecayTime) / decayTime;
+            }
+            xRot += y;
+            //}
+
 
             m_CharacterTargetRot *= Quaternion.Euler (0f, yRot, 0f);
             m_CameraTargetRot *= Quaternion.Euler (-xRot, 0f, 0f);

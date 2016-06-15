@@ -17,6 +17,7 @@ public class Inventory : MonoBehaviour
     public AudioClip lockDoor;
     public AudioClip usedKey;
     public AudioClip openDoor;
+    public AudioClip obstacle1;
 
     //public bool catchInfoLock;
 
@@ -52,7 +53,7 @@ public class Inventory : MonoBehaviour
         SoundPool.Instance.AddSoundClip("LockDoor", lockDoor);
         SoundPool.Instance.AddSoundClip("UsedKey", usedKey);
         SoundPool.Instance.AddSoundClip("OpenDoor", openDoor);
-
+        SoundPool.Instance.AddSoundClip("Obstacle1", obstacle1);
     }
 
     void OnDestory()

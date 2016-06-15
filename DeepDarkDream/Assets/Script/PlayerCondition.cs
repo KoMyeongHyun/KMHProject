@@ -15,6 +15,10 @@ public class PlayerCondition : MonoBehaviour
     private Transform mentalityTrans;
     public const float MENTALITY_IMG_SIZE = 90.0f;
 
+    [SerializeField]
+    private GameObject beShot;
+    private UnityStandardAssets.ImageEffects.MotionBlur motionBlur;
+
     // Use this for initialization
     void Awake ()
     {
@@ -24,6 +28,9 @@ public class PlayerCondition : MonoBehaviour
 
         staminaTrans = GameObject.FindGameObjectWithTag("Stamina").GetComponent<Transform>();
         mentalityTrans = GameObject.FindGameObjectWithTag("Mentality").GetComponent<Transform>();
+
+        motionBlur = GameObject.FindGameObjectWithTag("MainCamera").
+            GetComponent<UnityStandardAssets.ImageEffects.MotionBlur>();
     }
 	
 	// Update is called once per frame
@@ -33,15 +40,32 @@ public class PlayerCondition : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q))
             stamina.ChangeStaminaOfSpirit(mentality.DamagedMentality(300.0f));
         if (Input.GetKeyDown(KeyCode.E))
-            stamina.ChangeStaminaOfSpirit(mentality.RecoverMentality(100.0f));
+            stamina.ChangeStaminaOfSpirit(mentality.RecoverMentality(300.0f));
         if (Input.GetKeyDown(KeyCode.R))
             stamina.FullRecovery();
 
         bool result = stamina.CalculateStamina();
-
         if (result == false)
         {
             StartCoroutine(StandByRecovery());
+        }
+
+
+        //스테미너에서 한계상태 설정해주고 상태가 투르면 설정 켜주기 한번만 날려야 되는데
+        //motionBlur.enabled = stamina.Penalty ? true : false;
+        if(stamina.Penalty)
+        {
+            if(motionBlur.enabled == false)
+            {
+                motionBlur.enabled = true;
+            }
+        }
+        else
+        {
+            if(motionBlur.enabled)
+            {
+                motionBlur.enabled = false;
+            }
         }
 
         //시간 계속 더하기 특정 시간 이상이면 피 깎는 코루틴 작동
@@ -126,8 +150,23 @@ public class PlayerCondition : MonoBehaviour
         stamina.ChangeStaminaOfSpirit(mentality.DamagedMentality(value));
     }
 
-    void OnGUI()
+    public void BeShotFromMonster(int damage)
     {
-        //GUI.TextField(new Rect(1000, 500, 100, 20), stamina.CurrentStamina + " / " + stamina.MaxStaminaOfSpirit);
+        //피격 데미지 주기
+        DamagedMentality(damage);
+
+        //화면에 피격 표시 해주기
+        GameObject bs = Instantiate(beShot);
+        bs.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").GetComponent<Transform>());
+        bs.GetComponent<RectTransform>().localPosition = new Vector3(0.0f, 0.0f, 0.0f);
+        bs.GetComponent<RectTransform>().localScale = new Vector3(1.0f, 1.0f, 1.0f);
+
+        //화면 흔들어 주기
+        gameObject.SendMessage("OnBeShotWave");
     }
+
+    //void OnGUI()
+    //{
+        //GUI.TextField(new Rect(1000, 500, 100, 20), stamina.CurrentStamina + " / " + stamina.MaxStaminaOfSpirit);
+    //}
 }

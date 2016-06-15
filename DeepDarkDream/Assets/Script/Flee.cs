@@ -35,6 +35,9 @@ public class Flee : State
             {
                 farDistance = distance;
                 farIndex = i;
+
+                ani.SetBool("walk", true);
+                monster.NavAgent.SetDestination(monster.WayPoints[farIndex].position);
             }
         }
     }
@@ -49,8 +52,11 @@ public class Flee : State
             monster.GetStateMachine.ChangeState(new Guard());
         }
 
-        ani.SetBool("walk", true);
-        monster.NavAgent.SetDestination(monster.WayPoints[farIndex].position);
+        //ani.SetBool("walk", true);
+        //monster.NavAgent.SetDestination(monster.WayPoints[farIndex].position);
+
+        //Debug.DrawRay(obj.transform.position, monster.WayPoints[farIndex].position - obj.transform.position);
+        //Debug.Log("현재 도망 중이야~");
     }
 
     public override void Exit(GameObject obj)

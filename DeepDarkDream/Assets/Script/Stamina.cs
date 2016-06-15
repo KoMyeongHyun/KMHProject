@@ -6,11 +6,14 @@ delegate bool InstructionStamina();
 public class Stamina
 {
     public const float MAX_STAMINA = 1000.0f;
+    public const float PENALTY_STAMINA = MAX_STAMINA * 0.2f;
 
     private float maxStaminaOfSpirit;
     public float MaxStaminaOfSpirit { get { return maxStaminaOfSpirit; } }
     private float currentStamina;
     public float CurrentStamina { get { return currentStamina; } }
+    private bool penalty;
+    public bool Penalty { get { return penalty; } }
 
     private float consumeSpeed = 100.0f;
     private float consumeSpeedOfSlowWalk = 30.0f;
@@ -26,7 +29,8 @@ public class Stamina
     {
         maxStaminaOfSpirit = MAX_STAMINA;
         currentStamina = maxStaminaOfSpirit;
-        
+        penalty = false;
+
         instructions = new InstructionStamina[(int)WALK_STATE.WALK_COUNT];
         instructions[(int)WALK_STATE.STOP] = RecoverStaminaOfStop;
         instructions[(int)WALK_STATE.SLOW_WALK] = SpendStaminaOfSlowWalk;
@@ -41,6 +45,8 @@ public class Stamina
     {
         int curInst = (int)player.WalkState;
         bool result = instructions[curInst]();
+
+        penalty = currentStamina < PENALTY_STAMINA ? true : false;
 
         return result;
         //스테미너 0되면 몇초 후에 가능하게 해주는건 코루틴 사용

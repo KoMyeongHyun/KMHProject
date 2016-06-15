@@ -72,6 +72,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private bool invincible;
         public bool Invincible { get; set; }
 
+
         //private SphereCollider soundRange;
 
         // Use this for initialization
@@ -427,6 +428,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_MouseLook.LookRotation (transform, m_Camera.transform);
         }
 
+        public void OnBeShotWave()
+        {
+            m_MouseLook.InitProcessDecayTime();
+        }
+
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {
             //문, 몬스터는 밀어버리고 진행하게끔 수정할 것 (문과 몬스터에 rigidbody 심어주고 컨트롤 할 것)
@@ -448,7 +454,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             {
                 return;
             }
-            //Debug.Log("opponent check");
+            
             body.AddForceAtPosition(m_CharacterController.velocity * 0.1f, hit.point, ForceMode.Impulse);
         }
     }

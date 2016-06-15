@@ -13,18 +13,20 @@ public class Obstacle : MonoBehaviour
     protected string[] animationName;
 
     private Transform center;
+    private SoundController soundController;
 
     // Use this for initialization
     protected virtual void Start()
     {
         gameObject.GetComponent<Animation>().wrapMode = WrapMode.Loop;
         center = transform.GetChild(1);
+        soundController = new SoundController(this.gameObject);
     }
 
     void HitPlayer(Transform hit)
     {
-        //플레이어가 움직이지 않으면 충돌이 안되는거 해결해야 됨
-        GameObject.FindGameObjectWithTag("Player").SendMessage("DamagedMentality", damage);
+        hit.SendMessage("BeShotFromMonster", damage);
+        soundController.ChangeAndPlay("Obstacle1");
         StartCoroutine(KnockbackPlayer(hit));
         StartCoroutine(StunPlayer(hit));
     }
@@ -70,6 +72,7 @@ public class Obstacle : MonoBehaviour
         gameObject.GetComponent<Animation>()[animationName[0]].speed = 1.0f;
     }
 
+    //플레이어가 움직이지 않아도 충돌 처리가 될 수 있도록 Player Trigger 사용
     public void OnTriggerStay(Collider col)
     {
         if(col.tag == "PlayerOb")
