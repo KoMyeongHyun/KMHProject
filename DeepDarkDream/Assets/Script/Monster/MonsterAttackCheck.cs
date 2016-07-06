@@ -14,7 +14,7 @@ public class MonsterAttackCheck : MonoBehaviour
             //한번의 애니메이션당 한번만 동작하도록
             if (ani.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
             {
-                //캐스팅 실패 처리할 것
+                //에러 발생 상황이 존재함, 캐스팅 실패 처리할 것
                 Combat combat = (Combat)ani.transform.GetComponent<Monster>().GetStateMachine.GetCurState;
                 if (combat.AttackCount > 0)
                 {

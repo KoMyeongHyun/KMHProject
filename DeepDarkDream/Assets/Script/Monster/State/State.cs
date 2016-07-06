@@ -3,24 +3,15 @@ using System.Collections;
 
 public enum Behaviors { IDLE, GUARD, COMBAT, FLEE };
 
-public class State
+public abstract class State
 {
     protected Animator ani;
 
-    public virtual void Enter(GameObject obj)
-    {
+    public abstract void Enter(GameObject obj);
 
-    }
+    public abstract void Execute(GameObject obj);
 
-    public virtual void Execute(GameObject obj)
-    {
-
-    }
-
-    public virtual void Exit(GameObject obj)
-    {
-
-    }
+    public abstract void Exit(GameObject obj);
 
     public virtual void TriggerEnter(GameObject obj, Collider col)
     {

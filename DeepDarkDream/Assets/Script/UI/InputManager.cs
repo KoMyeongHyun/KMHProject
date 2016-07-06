@@ -38,14 +38,10 @@ public class InputManager : MonoBehaviour {
     {
         //다른 클릭 입력 처리
         
-        if(Input.GetKeyDown(KeyCode.Tab))
-        {
-            //Vector2 hotspot = new Vector2(defaultCursor.width * DefaultHotSpot.x, defaultCursor.height * DefaultHotSpot.y);
-            //Cursor.SetCursor(defaultCursor, hotspot, CursorMode.Auto);
-//            Cursor.lockState = CursorLockMode.None;
-//            Cursor.visible = true;
-            Application.LoadLevel("Title");
-        }
+        //if(Input.GetKeyDown(KeyCode.Tab))
+        //{
+        //    Application.LoadLevel("Title");
+        //}
 
         if (inven.GetComponent<Inventory>().catchInfo.activeSelf == true)
         {

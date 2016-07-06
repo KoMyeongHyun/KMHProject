@@ -37,7 +37,7 @@ public class Monster : MonoBehaviour
     }
 	
 	// Update is called once per frame
-	void FixedUpdate ()
+	void Update ()
     {
         stateMachine.RunBehaviors();
 	}

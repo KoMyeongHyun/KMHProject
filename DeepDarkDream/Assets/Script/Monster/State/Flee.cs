@@ -4,7 +4,6 @@ using System.Collections;
 public class Flee : State
 {
     private Monster monster;
-    //private int curWayPoint;
     private float distance;
     private int farIndex;
 
@@ -12,60 +11,55 @@ public class Flee : State
     {
         monster = obj.GetComponent<Monster>();
         ani = obj.GetComponent<Animator>();
-
-        //curWayPoint = 0;
-        monster.NavAgent.ResetPath();
-
-        //플레이어와 가장 멀리 있는 waypoint를 찾아 이동한다
-        //이미 가장 멀리 있는 waypoint에 있다면 다른 곳으로 이동하도록 한다.
-        //이동하면서 플레이어와 접촉하면?
-        float farDistance = 0.0f;
         farIndex = 0;
-        //foreach (Transform point in monster.WayPoints)
-        for(int i = 0; i < monster.WayPoints.Length; ++i)
+
+        //몬스터 자기 자신과 가장 멀리 있는 waypoint를 찾아 이동한다
+        //기존에는 플레이어와 가장 멀리 떨어진 waypoint를 찾아 이동했었음
+        //현 문제점 : 도망인데 플레이어에게 다가오는 느낌을 줄 수 있다.
+        float farDistance = -1.0f;
+        for (int i = 0; i < monster.WayPoints.Length; ++i)
         {
             distance = Vector3.Distance(monster.transform.position, monster.WayPoints[i].position);
-            if(distance < 1.0f)
-            {
-                continue;
-            }
-
-            distance = Vector3.Distance(monster.Target.position, monster.WayPoints[i].position);
-            if (farDistance < distance)
+            if(farDistance < distance)
             {
                 farDistance = distance;
                 farIndex = i;
-
-                ani.SetBool("walk", true);
-                monster.NavAgent.SetDestination(monster.WayPoints[farIndex].position);
             }
         }
+
+        ani.SetBool("walk", true);
+        monster.NavAgent.SetDestination(monster.WayPoints[farIndex].position);
+        Debug.Log("도망 시작 " + farIndex);
     }
 
     public override void Execute(GameObject obj)
     {
-        distance = Vector3.Distance(obj.transform.position, monster.WayPoints[farIndex].position);
+        //destination 잘못 지정되는 버그 원인은 FixedUpdate
 
-        if (distance < 1.0f)
+        if (monster.NavAgent.remainingDistance < 1.0f)
         {
-            Debug.Log("정찰 상태로 전환");
-            monster.GetStateMachine.ChangeState(new Guard());
+            //Destination과 WayPoints[farIndex]의 거리가 1.0f보다 작지 않다면 다른 경로로 재설정
+            distance = Vector3.Distance(monster.NavAgent.destination, monster.WayPoints[farIndex].position);
+            if(distance > 1.0f)
+            {
+                ++farIndex;
+                if(farIndex >= monster.WayPoints.Length)
+                {
+                    farIndex = 0;
+                }
+                monster.NavAgent.SetDestination(monster.WayPoints[farIndex].position);
+            }
+            else
+            {
+                Debug.Log("도망에서 정찰 상태로 전환");
+                monster.GetStateMachine.ChangeState(new Guard());
+            }
         }
-
-        //ani.SetBool("walk", true);
-        //monster.NavAgent.SetDestination(monster.WayPoints[farIndex].position);
-
-        //Debug.DrawRay(obj.transform.position, monster.WayPoints[farIndex].position - obj.transform.position);
-        //Debug.Log("현재 도망 중이야~");
     }
 
     public override void Exit(GameObject obj)
     {
+        Debug.Log("도망 종료");
         monster.NavAgent.ResetPath();
-    }
-
-
-    public override void TriggerEnter(GameObject obj, Collider col)
-    {
     }
 }
