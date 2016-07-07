@@ -27,17 +27,26 @@ public class Flee : State
             }
         }
 
+        //Execute에서 하나를 더해주고 설정해주기 때문에
+        --farIndex;
+        if(farIndex < 0)
+        {
+            farIndex = monster.WayPoints.Length - 1;
+        }
+
         ani.SetBool("walk", true);
-        monster.NavAgent.SetDestination(monster.WayPoints[farIndex].position);
         Debug.Log("도망 시작 " + farIndex);
     }
 
     public override void Execute(GameObject obj)
     {
-        //destination 잘못 지정되는 버그 원인은 FixedUpdate
-
         if (monster.NavAgent.remainingDistance < 1.0f)
         {
+            if (ani.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
+            {
+                return;
+            }
+
             //Destination과 WayPoints[farIndex]의 거리가 1.0f보다 작지 않다면 다른 경로로 재설정
             distance = Vector3.Distance(monster.NavAgent.destination, monster.WayPoints[farIndex].position);
             if(distance > 1.0f)

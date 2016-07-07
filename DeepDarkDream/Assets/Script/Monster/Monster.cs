@@ -9,6 +9,10 @@ public class Monster : MonoBehaviour
     private Transform[] wayPoints;
     public Transform[] WayPoints { get { return wayPoints; } }
 
+    [SerializeField]
+    private MonsterAttackCheck attackCheck;
+    public MonsterAttackCheck AttackCheck { get { return attackCheck; } }
+
     private NavMeshAgent navAgent;
     public NavMeshAgent NavAgent { get { return navAgent; } }
     private Transform target;

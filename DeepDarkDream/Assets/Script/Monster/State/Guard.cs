@@ -11,14 +11,14 @@ public class Guard : State
     {
         monster = obj.GetComponent<Monster>();
         ani = obj.GetComponent<Animator>();
-        
-        curWayPoint = 0;
+
+        //Execute에서 하나를 더해주고 설정해주기 때문에
+        curWayPoint = monster.WayPoints.Length;
         Debug.Log("현재 정찰");
         obj.transform.GetChild(0).GetComponent<VisualRange>().enabled = true;
         obj.transform.GetChild(1).GetComponent<SoundRange>().enabled = true;
 
         ani.SetBool("walk", true);
-        monster.NavAgent.SetDestination(monster.WayPoints[curWayPoint].position);
     }
 
     public override void Execute(GameObject obj)
@@ -27,6 +27,11 @@ public class Guard : State
 
         if (monster.NavAgent.remainingDistance < 1.0f)
         {
+            if (ani.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
+            {
+                return;
+            }
+
             //리버스 기능 추가 할 것
             ++curWayPoint;
             if (curWayPoint >= monster.WayPoints.Length)

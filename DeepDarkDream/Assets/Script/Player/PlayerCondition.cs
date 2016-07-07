@@ -84,7 +84,7 @@ public class PlayerCondition : MonoBehaviour
                 StartCoroutine(DecreaseMentality());
         }
 
-        //DisplayCondition();
+        DisplayCondition();
 	}
 
     private void DisplayCondition()
