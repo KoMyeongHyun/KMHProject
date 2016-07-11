@@ -23,6 +23,7 @@ public class SoundRange : MonoBehaviour
     {
         if (col.tag == "PlayerSound")
         {
+            Debug.Log("here");
             //if (player.WalkState == WALK_STATE.SLOW_WALK || player.WalkState == WALK_STATE.STOP)
             if(player.PlayerSoundRange == false)
             {

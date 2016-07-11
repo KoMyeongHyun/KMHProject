@@ -5,8 +5,6 @@ public enum Behaviors { IDLE, GUARD, COMBAT, FLEE };
 
 public abstract class State
 {
-    protected Animator ani;
-
     public abstract void Enter(GameObject obj);
 
     public abstract void Execute(GameObject obj);

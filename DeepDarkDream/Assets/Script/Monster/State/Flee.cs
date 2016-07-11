@@ -4,13 +4,14 @@ using System.Collections;
 public class Flee : State
 {
     private Monster monster;
+    private Animator ani;
     private float distance;
     private int farIndex;
 
     public override void Enter(GameObject obj)
     {
         monster = obj.GetComponent<Monster>();
-        ani = obj.GetComponent<Animator>();
+        ani = monster.Ani;
         farIndex = 0;
 
         //몬스터 자기 자신과 가장 멀리 있는 waypoint를 찾아 이동한다
@@ -27,32 +28,34 @@ public class Flee : State
             }
         }
 
+        monster.NavAgent.SetDestination(monster.WayPoints[farIndex].position);
         //Execute에서 하나를 더해주고 설정해주기 때문에
-        --farIndex;
-        if(farIndex < 0)
-        {
-            farIndex = monster.WayPoints.Length - 1;
-        }
+        //--farIndex;
+        //if(farIndex < 0)
+        //{
+        //    farIndex = monster.WayPoints.Length - 1;
+        //}
 
         ani.SetBool("walk", true);
-        Debug.Log("도망 시작 " + farIndex);
+        Debug.Log("도망 시작 " + farIndex + " " + monster.NavAgent.destination);
     }
 
     public override void Execute(GameObject obj)
     {
-        if (monster.NavAgent.remainingDistance < 1.0f)
-        {
-            if (ani.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
-            {
-                return;
-            }
+        Debug.Log(monster.NavAgent.destination);
 
+        if (ani.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
+        {
+            return;
+        }
+        else if (monster.NavAgent.remainingDistance < 1.0f)
+        {
             //Destination과 WayPoints[farIndex]의 거리가 1.0f보다 작지 않다면 다른 경로로 재설정
             distance = Vector3.Distance(monster.NavAgent.destination, monster.WayPoints[farIndex].position);
-            if(distance > 1.0f)
+            if (distance > 1.0f)
             {
                 ++farIndex;
-                if(farIndex >= monster.WayPoints.Length)
+                if (farIndex >= monster.WayPoints.Length)
                 {
                     farIndex = 0;
                 }

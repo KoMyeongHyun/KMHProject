@@ -63,7 +63,8 @@ public class MonsterAttackCheck : MonoBehaviour
         if(col.tag == "PlayerOb")
         {
             //한번의 액션 애니메이션에 count 만큼 타격이 가능하도록
-            if(attackInfo.count > 0)
+            //공격 애니메이션 마무리 부분에서 공격이 이뤄지지 않도록
+            if(attackInfo.count > 0 && ani.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.65f)
             {
                 --attackInfo.count;
 

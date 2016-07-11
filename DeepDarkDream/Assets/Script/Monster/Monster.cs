@@ -13,6 +13,24 @@ public class Monster : MonoBehaviour
     private MonsterAttackCheck attackCheck;
     public MonsterAttackCheck AttackCheck { get { return attackCheck; } }
 
+    [SerializeField]
+    private VisualRange vRange;
+    public VisualRange VRange { get { return vRange; } }
+    [SerializeField]
+    private SoundRange sRange;
+    public SoundRange SRange { get { return sRange; } }
+    [SerializeField]
+    private ChaseStopRange csRange;
+    public ChaseStopRange CSRange { get { return csRange; } }
+    [SerializeField]
+    private MainBody body;
+    public MainBody Body { get { return body; } }
+
+
+    [SerializeField] private Animator ani;
+    public Animator Ani { get { return ani; } }
+
+    //[SerializeField]
     private NavMeshAgent navAgent;
     public NavMeshAgent NavAgent { get { return navAgent; } }
     private Transform target;
@@ -30,7 +48,10 @@ public class Monster : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        //behavior = Behaviors.GUARD;
+        vRange.enabled = false;
+        sRange.enabled = false;
+        csRange.enabled = false;
+        
         navAgent = gameObject.GetComponent<NavMeshAgent>();
         target = GameObject.FindWithTag("Player").transform;
 

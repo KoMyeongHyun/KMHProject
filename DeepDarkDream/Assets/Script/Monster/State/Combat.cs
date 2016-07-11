@@ -4,6 +4,7 @@ using System.Collections;
 public class Combat : State
 {
     private Monster monster;
+    private Animator ani;
 
     private float distance;
 
@@ -15,11 +16,13 @@ public class Combat : State
     public override void Enter(GameObject obj)
     {
         monster = obj.GetComponent<Monster>();
-        ani = obj.GetComponent<Animator>();
+        ani = monster.Ani;
         
         Debug.Log("현재 공격");
-        obj.transform.GetChild(2).GetComponent<ChaseStopRange>().enabled = true;
-        
+        //obj.transform.GetChild(2).GetComponent<ChaseStopRange>().enabled = true;
+        monster.CSRange.enabled = true;
+        monster.Body.enabled = true;
+
         attackInfo = new AttackInfo();
         attackInfo.progress = false;
         attackInfo.count = 1;
@@ -44,9 +47,12 @@ public class Combat : State
         if (distance < 3.0f)
         {
             //플레이어를 바라보도록 한다.
-            Quaternion look = Quaternion.LookRotation((tarPos - objPos));
-            obj.transform.rotation = Quaternion.Lerp(obj.transform.rotation, look, Time.deltaTime * 2.0f);
-
+            if (monster.NavAgent.remainingDistance == 0.0f)
+            {
+                Quaternion look = Quaternion.LookRotation((tarPos - objPos));
+                obj.transform.rotation = Quaternion.Lerp(obj.transform.rotation, look, Time.deltaTime * 2.0f);
+            }
+            
             if (attackInfo.progress == false)
             {
                 attackInfo.count = 1;
@@ -87,25 +93,26 @@ public class Combat : State
         Debug.Log("공격 종료");
         monster.AttackCheck.EndAttack();
         monster.NavAgent.ResetPath();
-        obj.transform.GetChild(2).GetComponent<ChaseStopRange>().enabled = false;
+        monster.CSRange.enabled = false;
+        monster.Body.enabled = false;
         ani.SetBool("attack", false);
 
         monster.SetSoundDelay(monster.SoundDelay - 1);
     }
 
-    public override void TriggerStay(GameObject obj, Collider col)
-    {
-        if (col.tag == "LanternLight")
-        {
-            //수정할 것
-            //if (Cast(obj, col) == true)
-            //{
-            //    return;
-            //}
-            Debug.Log("도망 상태로 전환2");
-            monster.GetStateMachine.ChangeState(new Flee());
-        }
-    }
+    //public override void TriggerStay(GameObject obj, Collider col)
+    //{
+    //    if (col.tag == "LanternLight")
+    //    {
+    //        //수정할 것
+    //        //if (Cast(obj, col) == true)
+    //        //{
+    //        //    return;
+    //        //}
+    //        Debug.Log("도망 상태로 전환2" + col.name);
+    //        monster.GetStateMachine.ChangeState(new Flee());
+    //    }
+    //}
 
     private void CollisionCheck(GameObject obj)
     {
@@ -115,33 +122,37 @@ public class Combat : State
             Debug.Log("플레이어 무적임으로 정찰 전환");
             monster.GetStateMachine.ChangeState(new Guard());
         }
-        else if (obj.transform.GetChild(2).GetComponent<ChaseStopRange>().ChaseStop)
+        else if (monster.Body.BeShot)
         {
-            Debug.Log("정찰 상태로 전환");
+            Debug.Log("공격 중 빛에 닿음 도망 상태로 전환");
+            monster.GetStateMachine.ChangeState(new Flee());
+        }
+        else if (monster.CSRange.ChaseStop)
+        {
+            Debug.Log("플레이어 놓침 정찰 상태로 전환");
             monster.GetStateMachine.ChangeState(new Guard());
         }
     }
 
-    private bool Cast(GameObject obj, Collider col)
-    {
-        RaycastHit hit;
+    //private bool Cast(GameObject obj, Collider col)
+    //{
+    //    RaycastHit hit;
         
-        Vector3 tarPos = col.transform.position;
-        Vector3 objPos = obj.transform.position;
+    //    Vector3 tarPos = col.transform.position;
+    //    Vector3 objPos = obj.transform.position;
 
-        Debug.DrawRay(objPos, tarPos - objPos, Color.gray);
+    //    Debug.DrawRay(objPos, tarPos - objPos, Color.gray);
 
-        int layerMask = (1 << 8) | (1 << 10);
-        layerMask = ~layerMask;
+    //    int layerMask = (1 << 8) | (1 << 10);
+    //    layerMask = ~layerMask;
 
-        bool result = Physics.Raycast(objPos, tarPos - objPos, out hit, (tarPos - objPos).magnitude, layerMask);
-        return result;
-    }
+    //    bool result = Physics.Raycast(objPos, tarPos - objPos, out hit, (tarPos - objPos).magnitude, layerMask);
+    //    return result;
+    //}
 }
 
 public class AttackInfo
 {
     public bool progress;
     public int count;
-    //public Animator ani;
 }

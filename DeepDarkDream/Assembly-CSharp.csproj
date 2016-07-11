@@ -68,6 +68,7 @@
      <Compile Include="Assets\Script\Monster\Monster.cs" />
      <Compile Include="Assets\Script\Monster\MonsterAttackCheck.cs" />
      <Compile Include="Assets\Script\Monster\Range\ChaseStopRange.cs" />
+     <Compile Include="Assets\Script\Monster\Range\MainBody.cs" />
      <Compile Include="Assets\Script\Monster\Range\SoundRange.cs" />
      <Compile Include="Assets\Script\Monster\Range\VisualRange.cs" />
      <Compile Include="Assets\Script\Monster\State\Combat.cs" />
