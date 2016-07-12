@@ -19,7 +19,6 @@ public class Combat : State
         ani = monster.Ani;
         
         Debug.Log("현재 공격");
-        //obj.transform.GetChild(2).GetComponent<ChaseStopRange>().enabled = true;
         monster.CSRange.enabled = true;
         monster.Body.enabled = true;
 
@@ -38,7 +37,11 @@ public class Combat : State
 
     public override void Execute(GameObject obj)
     {
-        CollisionCheck(obj);
+        //상태 변화가 있다면 바로 종료
+        if( CollisionCheck(obj) )
+        {
+            return;
+        }
 
         objPos = obj.transform.position;
         tarPos = monster.Target.position;
@@ -46,11 +49,11 @@ public class Combat : State
 
         if (distance < 3.0f)
         {
-            //플레이어를 바라보도록 한다.
+            //공격 모션을 시작하지 않았다면 플레이어를 바라보도록 한다.
             if (monster.NavAgent.remainingDistance == 0.0f)
             {
                 Quaternion look = Quaternion.LookRotation((tarPos - objPos));
-                obj.transform.rotation = Quaternion.Lerp(obj.transform.rotation, look, Time.deltaTime * 2.0f);
+                obj.transform.rotation = Quaternion.Lerp(obj.transform.rotation, look, Time.deltaTime * 3.0f);
             }
             
             if (attackInfo.progress == false)
@@ -70,85 +73,61 @@ public class Combat : State
             Debug.Log("플레이어 너무 멀어서 정찰 상태로 전환");
             monster.GetStateMachine.ChangeState(new Guard());
         }
-        
-        if(ani.GetCurrentAnimatorStateInfo(0).IsName("Walk") == false)
-        {
-            ani.SetBool("attack", false);
-            ani.SetBool("walk", true);
-        }
         else
         {
-            //추격(걷기) 상태로 변하면서 공격을 강제 종료 시켜야 되는 상황
-            monster.AttackCheck.EndAttack();
-        }
-
-        if (ani.GetCurrentAnimatorStateInfo(0).IsName("Attack") == false)
-        {
-            monster.NavAgent.SetDestination(tarPos);
+            //공격 중지 플레이어에게 접근하기
+            if (attackInfo.progress)
+            {
+                monster.AttackCheck.EndAttack();
+                ani.SetBool("attack", false);
+                ani.SetBool("walk", true);
+            }
+            else if (ani.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
+            {
+                monster.NavAgent.SetDestination(tarPos);
+            }
         }
     }
 
     public override void Exit(GameObject obj)
     {
         Debug.Log("공격 종료");
-        monster.AttackCheck.EndAttack();
         monster.NavAgent.ResetPath();
         monster.CSRange.enabled = false;
         monster.Body.enabled = false;
+
+        monster.AttackCheck.EndAttack();
         ani.SetBool("attack", false);
 
         monster.SetSoundDelay(monster.SoundDelay - 1);
     }
 
-    //public override void TriggerStay(GameObject obj, Collider col)
-    //{
-    //    if (col.tag == "LanternLight")
-    //    {
-    //        //수정할 것
-    //        //if (Cast(obj, col) == true)
-    //        //{
-    //        //    return;
-    //        //}
-    //        Debug.Log("도망 상태로 전환2" + col.name);
-    //        monster.GetStateMachine.ChangeState(new Flee());
-    //    }
-    //}
-
-    private void CollisionCheck(GameObject obj)
+    private bool CollisionCheck(GameObject obj)
     {
         if (monster.Target.GetComponent<UnityStandardAssets.Characters
             .FirstPerson.FirstPersonController>().Invincible)
         {
             Debug.Log("플레이어 무적임으로 정찰 전환");
             monster.GetStateMachine.ChangeState(new Guard());
+            return true;
         }
         else if (monster.Body.BeShot)
         {
             Debug.Log("공격 중 빛에 닿음 도망 상태로 전환");
             monster.GetStateMachine.ChangeState(new Flee());
+            return true;
         }
         else if (monster.CSRange.ChaseStop)
         {
             Debug.Log("플레이어 놓침 정찰 상태로 전환");
             monster.GetStateMachine.ChangeState(new Guard());
+            return true;
         }
+
+        //장애물이 가로막고 있는 상황 추가해야 됨
+
+        return false;
     }
-
-    //private bool Cast(GameObject obj, Collider col)
-    //{
-    //    RaycastHit hit;
-        
-    //    Vector3 tarPos = col.transform.position;
-    //    Vector3 objPos = obj.transform.position;
-
-    //    Debug.DrawRay(objPos, tarPos - objPos, Color.gray);
-
-    //    int layerMask = (1 << 8) | (1 << 10);
-    //    layerMask = ~layerMask;
-
-    //    bool result = Physics.Raycast(objPos, tarPos - objPos, out hit, (tarPos - objPos).magnitude, layerMask);
-    //    return result;
-    //}
 }
 
 public class AttackInfo

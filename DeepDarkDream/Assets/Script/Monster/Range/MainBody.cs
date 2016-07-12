@@ -8,28 +8,35 @@ public class MainBody : MonoBehaviour
 
     void OnEnable()
     {
+        gameObject.GetComponent<CapsuleCollider>().enabled = true;
         beShot = false;
+    }
+    void OnDisable()
+    {
+        gameObject.GetComponent<CapsuleCollider>().enabled = false;
     }
 
     public void OnTriggerStay(Collider col)
     {
         if (col.tag == "LanternLight")
         {
+            //두 오브젝트 사이에 장애물이 존재하는지 검사
+            if (Cast(col))
+            {
+                return;
+            }
+
             beShot = true;
         }
     }
 
-    private bool Cast(GameObject obj, Collider col)
+    private bool Cast(Collider col)
     {
         RaycastHit hit;
-
         Vector3 tarPos = col.transform.position;
-        Vector3 objPos = obj.transform.position;
+        Vector3 objPos = transform.position;
 
-        Debug.DrawRay(objPos, tarPos - objPos, Color.gray);
-
-        int layerMask = (1 << 8) | (1 << 10);
-        layerMask = ~layerMask;
+        int layerMask = (1 << 0) | (1 << 11) | (1 << 13);
 
         bool result = Physics.Raycast(objPos, tarPos - objPos, out hit, (tarPos - objPos).magnitude, layerMask);
         return result;

@@ -121,29 +121,11 @@ public class PlayerCondition : MonoBehaviour
 
     public void OnTriggerStay(Collider col)
     {
+        //빛에 닿아있으면 패널티 시간 초기화
         if(col.tag == "LanternLight")
         {
-            if (Cast(col) == true)
-                return;
-
             lacklustreTime = 0.0f;
         }
-    }
-
-    private bool Cast(Collider col)
-    {
-        RaycastHit hit;
-
-        Vector3 tarPos = col.transform.position;
-        Vector3 objPos = this.transform.position;
-
-        Debug.DrawRay(objPos, tarPos - objPos, Color.gray);
-
-        int layerMask = (1 << 8) | (1 << 10);
-        layerMask = ~layerMask;
-
-        bool result = Physics.Raycast(objPos, tarPos - objPos, out hit, (tarPos - objPos).magnitude, layerMask);
-        return result;
     }
 
     public void RecoverMentalityForMedicine(float value)
