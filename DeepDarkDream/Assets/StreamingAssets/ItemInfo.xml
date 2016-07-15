@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Items>
+  <Item id="1" name="book" type="RECORD" targetName="" funcName="" />
+  <Item id="2" name="book" type="RECORD" targetName="" funcName="" />
+</Items>

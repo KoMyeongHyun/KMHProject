@@ -4,13 +4,16 @@ using System.Collections.Generic;
 
 public class SoundPool
 {
+    //Scene 전환 시 instance 값을 null로 설정해줄 것
     private static SoundPool instance = null;
     public static SoundPool Instance
     {
         get
         {
             if (instance == null)
+            {
                 instance = new SoundPool();
+            }
             return instance;
         }
     }

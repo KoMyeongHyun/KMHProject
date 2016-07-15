@@ -89,8 +89,6 @@ public class Guard : State
             return true;
         }
 
-        //그러니까 감지를 했는데 chasestoprange 밖에 있다면 무효
-
         return false;
     }
 }

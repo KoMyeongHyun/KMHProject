@@ -77,7 +77,7 @@ public class Inventory : MonoBehaviour
         //같은 이름의 아이템이 존재할 경우
         for (int i = 0; i < items.Count; ++i)
         {
-            if(items[i].itemName == _item.itemName)
+            if(items[i].NAME == _item.NAME)
             {
                 //Debug.Log(itemSlots[i].GetComponent<Slot>().itemCount);
                 itemSlots[i].GetComponent<Slot>().AddItem();
@@ -88,7 +88,7 @@ public class Inventory : MonoBehaviour
         //함수 호출 시 items 빈 공간 검색 후 아이템 추가
         for (int i = 0; i < items.Count; ++i)
         {
-            if(items[i].itemName == null)
+            if(items[i].NAME == null)
             {
                 //DB에서 가져오는 방법?
                 //items[i] = Instantiate(GameObject.FindGameObjectWithTag("Empty")).GetComponent<Item>() ;
@@ -96,7 +96,7 @@ public class Inventory : MonoBehaviour
                 items[i] = _item;
                 
                 //만약 책이라면 추가함수 실행
-                if (_item.itemType == ItemType.BOOK)
+                if (_item.TYPE == ItemType.RECORD)
                 {
                     ShowCatchBook();
                 }
@@ -114,7 +114,7 @@ public class Inventory : MonoBehaviour
     {
         for (int i = 0; i < items.Count; ++i)
         {
-            if (items[i].itemName == itemName)
+            if (items[i].NAME == itemName)
             {
                 return true;
             }
@@ -128,7 +128,7 @@ public class Inventory : MonoBehaviour
     {
         tooltip.SetActive(true);
         tooltip.transform.position = toolPosition + new Vector3(Screen.width*0.1f,-Screen.height*0.1f,0.0f);
-        tooltip.transform.GetChild(0).GetComponent<Text>().text = item.itemName;
+        tooltip.transform.GetChild(0).GetComponent<Text>().text = item.NAME;
     }
     public void CloseTooltip()
     {
@@ -141,7 +141,7 @@ public class Inventory : MonoBehaviour
         catchInfo.transform.localPosition = Vector3.zero;
         RectTransform catchRect = catchInfo.GetComponent<RectTransform>();
         catchRect.sizeDelta = new Vector2(400, 400);
-        catchInfo.transform.GetChild(0).GetComponent<Text>().text = item.itemName;
+        catchInfo.transform.GetChild(0).GetComponent<Text>().text = item.NAME;
         catchInfo.transform.GetChild(1).GetComponent<Text>().text = "State";
         catchInfo.transform.GetChild(2).GetComponent<Text>().text = "Desc";
         //inprogress true로 만들면

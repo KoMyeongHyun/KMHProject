@@ -29,41 +29,6 @@ public class DroppedItem : MonoBehaviour
         inProgress = false;
     }
 
-    public void Update()
-    {
-        //if (Input.GetMouseButtonDown(0) && inProgress == false)
-        //{
-        //    bool catchInfo = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>().catchInfo.activeSelf;
-        //    if (catchInfo == true)
-        //    {
-        //        return;
-        //    }
-
-        //    float distance = Vector3.Distance(this.gameObject.transform.position, player.transform.position);
-        //    if (distance <= 1.7f)
-        //    {
-        //        if (fpc.StopBehavior)
-        //            return;
-
-        //        Vector3 itemDir = this.transform.position - player.transform.position;
-        //        float permissionVal = Vector3.Dot(player.transform.forward, itemDir);
-        //        if (permissionVal >= 0.01f)
-        //        {
-        //            inProgress = true;
-        //            Debug.Log("item get " + permissionVal);
-        //            //아이템 정보 넘겨주기
-        //            GameObject.FindGameObjectWithTag("Inventory").SendMessage("AddItem", item);
-        //            Destroy(gameObject);
-        //        }
-        //    }
-        //}
-        //else if (Input.GetMouseButtonUp(0))
-        //{
-        //    //아이템 하나하나 먹을 수 있도록 마우스를 때면 초기화
-        //    inProgress = false;
-        //}
-    }
-
     public void OnTriggerEnter(Collider col)
     {
     }

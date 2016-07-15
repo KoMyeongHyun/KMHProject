@@ -29,10 +29,10 @@ public class Slot : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
 
     public void AddItem()
     {
-        if (inven.items[slotNum].itemName == null)
+        if (inven.items[slotNum].NAME == null)
             return;
         
-        itemImage.sprite = inven.items[slotNum].itemIcon;
+        itemImage.sprite = inven.items[slotNum].ICON;
         itemImage.enabled = true;
 
         AddItemCount(1);
@@ -42,13 +42,13 @@ public class Slot : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
     {
         Item item = inven.items[slotNum];
 
-        if (item.itemName == null || item.itemTargetName == null || item.itemFuncName == null)
+        if (item.NAME == null || item.TARGET_NAME == null || item.FUNC_NAME == null)
             return;
 
-        switch(item.itemType)
+        switch(item.TYPE)
         {
             case ItemType.CONSUMPTION:
-                GameObject.FindGameObjectWithTag(item.itemTargetName).SendMessage(item.itemFuncName, item.itemEffect);
+                GameObject.FindGameObjectWithTag(item.TARGET_NAME).SendMessage(item.FUNC_NAME, item.EFFECT);
                 AddItemCount(-1);
                 break;
         }
@@ -98,7 +98,7 @@ public class Slot : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
     public void OnPointerEnter(PointerEventData eventData)
     {
         //마우스를 가져다 대면 아이템의 정보가 뜨도록 설정할 것
-        if (inven.items[slotNum].itemName != null)
+        if (inven.items[slotNum].NAME != null)
         {
             inven.ShowTooltip(this.transform.position, inven.items[slotNum]);
         }

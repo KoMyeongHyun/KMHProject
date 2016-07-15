@@ -66,6 +66,10 @@
      <Compile Include="Assets\Script\Interactive\Obstacle.cs" />
      <Compile Include="Assets\Script\Interactive\Obstacle_07.cs" />
      <Compile Include="Assets\Script\Interactive\RuneStone.cs" />
+     <Compile Include="Assets\Script\Item\Item.cs" />
+     <Compile Include="Assets\Script\Item\ItemContainer.cs" />
+     <Compile Include="Assets\Script\Item\ItemParser.cs" />
+     <Compile Include="Assets\Script\Item\Record.cs" />
      <Compile Include="Assets\Script\Monster\Monster.cs" />
      <Compile Include="Assets\Script\Monster\MonsterAttackCheck.cs" />
      <Compile Include="Assets\Script\Monster\Range\ChaseStopRange.cs" />
@@ -86,7 +90,6 @@
      <Compile Include="Assets\Script\UI\CatchInfo.cs" />
      <Compile Include="Assets\Script\UI\InputManager.cs" />
      <Compile Include="Assets\Script\UI\Inventory\Inventory.cs" />
-     <Compile Include="Assets\Script\UI\Inventory\Item.cs" />
      <Compile Include="Assets\Script\UI\Inventory\Slot.cs" />
      <Compile Include="Assets\Script\UI\NextLevel.cs" />
      <Compile Include="Assets\Script\UI\SoundController.cs" />
@@ -119,6 +122,7 @@
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\FisheyeShader.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\Contrast Stretch\Apply.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\frag_ao.cginc" />
+     <None Include="Assets\StreamingAssets\Record.xml" />
      <None Include="Assets\HandyHands\shaders\handyskin.shader" />
      <None Include="Assets\Hand painted bottle\readme.txt" />
      <None Include="Assets\Standard Assets\Effects\ToonShading\Shaders\ToonBasicOutline.shader" />
@@ -146,6 +150,7 @@
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_Antialiasing\DLAA.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\NoiseAndGrainDX11.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_BloomAndFlares\BrightPassFilter2.shader" />
+     <None Include="Assets\StreamingAssets\ItemInfo.xml" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_DepthOfField\SeparableBlur.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\MotionBlurClear.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\ColorCorrectionEffect.shader" />
