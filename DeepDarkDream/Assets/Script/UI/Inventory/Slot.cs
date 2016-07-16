@@ -74,6 +74,9 @@ public class Slot : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
             itemImage.sprite = null;
             itemImage.enabled = false;
             itemCount = 0;
+
+            Item item = inven.items[slotNum];
+            ItemContainer.Instance.RemoveItem(item.ID);
         }
     }
 

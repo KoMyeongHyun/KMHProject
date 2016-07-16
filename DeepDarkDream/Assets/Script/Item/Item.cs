@@ -31,6 +31,16 @@ public class Item
         funcName = _funcName;
         effect = _effect;
     }
+    public Item(Item _item)
+    {
+        icon = _item.icon;
+        name = _item.name;
+        id = _item.id;
+        type = _item.type;
+        targetName = _item.targetName;
+        funcName = _item.funcName;
+        effect = _item.effect;
+    }
 
     public Sprite ICON
     {

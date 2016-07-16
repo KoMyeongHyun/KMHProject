@@ -7,8 +7,9 @@ using System;
 
 public class ItemParser : MonoBehaviour
 {
-    void Start()
+    void Awake()
     {
+        //이전 씬에서 데이터 로딩할 때 진행할 것
         string path = GetPath("ItemInfo.xml");
         StartCoroutine(ParseItem(path));
         
@@ -70,6 +71,9 @@ public class ItemParser : MonoBehaviour
                 string name = child.Attributes.GetNamedItem("name").Value;
                 string type_str = child.Attributes.GetNamedItem("type").Value;
                 ItemType type = (ItemType)Enum.Parse(typeof(ItemType), type_str, true);
+                string targetName = child.Attributes.GetNamedItem("targetName").Value;
+                string funcName = child.Attributes.GetNamedItem("funcName").Value;
+                float effect = float.Parse(child.Attributes.GetNamedItem("effect").Value);
 
                 //type 넣어주면 알아서 생성하게 추후 factory 패턴으로 바꿀 것
                 Item item;
@@ -84,6 +88,9 @@ public class ItemParser : MonoBehaviour
                 item.ID = id;
                 item.NAME = name;
                 item.TYPE = type;
+                item.TARGET_NAME = targetName;
+                item.FUNC_NAME = funcName;
+                item.EFFECT = effect;
 
                 ItemContainer.Instance.AddItem(item);
             }
@@ -107,7 +114,18 @@ public class ItemParser : MonoBehaviour
 
             foreach(XmlNode child in node.ChildNodes)
             {
-                string content = child.Attributes.GetNamedItem("content").Value;
+                int id = int.Parse(child.Attributes.GetNamedItem("id").Value);
+                Item item = ItemContainer.Instance.GetItem(id);
+                if(item == null)
+                {
+                    print("Record 등록 실패 Item 존재 안함");
+                    continue;
+                }
+
+                Record record = item as Record;
+                string content_str = child.Attributes.GetNamedItem("content").Value;
+                StringBuilder content = new StringBuilder(content_str);
+                record.CONTENT = content;
                 Debug.Log(content);
             }
         }

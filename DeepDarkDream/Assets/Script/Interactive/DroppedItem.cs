@@ -5,26 +5,32 @@ public class DroppedItem : MonoBehaviour
 {
     //타입 선택에 따라 설정해야하는 값이 달라지도록 만들 것
     [SerializeField] private Sprite itemIcon;
-    [SerializeField] private string itemName;
+    //[SerializeField] private string itemName;
     [SerializeField] private int itemID;
-    [SerializeField] private ItemType itemType;
-    [SerializeField] private string itemTargetName;
-    [SerializeField] private string itemFuncName;
-    [SerializeField] private float itemEffect;
+    public int ItemID
+    {
+        set { itemID = value; }
+        get { return itemID; }
+    }
+    //[SerializeField] private ItemType itemType;
+    //[SerializeField] private string itemTargetName;
+    //[SerializeField] private string itemFuncName;
+    //[SerializeField] private float itemEffect;
 
     private InputManager inputManager;
     private Transform cameraTrans;
-    private Item item;
-    private GameObject player;
+    //private Item item;
+    //private GameObject player;
     private UnityStandardAssets.Characters.FirstPerson.FirstPersonController fpc;
     private static bool inProgress;
 
-    public void Awake()
+    public void Start()
     {
         inputManager = GameObject.FindGameObjectWithTag("Canvas").GetComponent<InputManager>();
         cameraTrans = GameObject.FindGameObjectWithTag("MainCamera").transform;
-        item = new Item(itemIcon, itemName, itemID, itemType, itemTargetName, itemFuncName, itemEffect);
-        player = GameObject.FindGameObjectWithTag("Player");
+        //item = new Item(itemIcon, itemName, itemID, itemType, itemTargetName, itemFuncName, itemEffect);
+
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
         fpc = player.GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
         inProgress = false;
     }
@@ -51,6 +57,13 @@ public class DroppedItem : MonoBehaviour
 
                 if (Input.GetMouseButtonDown(0) && inProgress == false)
                 {
+                    Item item = ItemContainer.Instance.GetItem(itemID);
+                    if(item == null)
+                    {
+                        return;
+                    }
+                    item.ICON = itemIcon;
+
                     //아이템 습득
                     inProgress = true;
                     Debug.Log("item get");

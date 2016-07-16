@@ -15,7 +15,7 @@ public class Inventory : MonoBehaviour
     public GameObject catchInfo;
     public GameObject catchBook;
 
-    private Image sourceImg;
+    //private Image sourceImg;
     public Image bookImg;
 
     public AudioClip lockDoor;
@@ -55,7 +55,7 @@ public class Inventory : MonoBehaviour
         //hide inven
         transform.position = new Vector3(5000.0f, 5000.0f);
 
-        sourceImg = catchInfo.GetComponent<Image>();
+        //sourceImg = catchInfo.GetComponent<Image>();
         
         //singleton 다음 스테이지로 넘어갔을 때 저장 값이 남아있다.
         SoundPool.Instance.AddSoundClip("LockDoor", lockDoor);
@@ -98,7 +98,7 @@ public class Inventory : MonoBehaviour
                 //만약 책이라면 추가함수 실행
                 if (_item.TYPE == ItemType.RECORD)
                 {
-                    ShowCatchBook();
+                    ShowCatchBook(items[i]);
                 }
                 else
                 {
@@ -151,7 +151,7 @@ public class Inventory : MonoBehaviour
         catchInfo.SetActive(false);
         catchBook.SetActive(false);
     }
-    public void ShowCatchBook()
+    public void ShowCatchBook(Item item)
     {
         //사이즈 설정
 
@@ -160,5 +160,8 @@ public class Inventory : MonoBehaviour
         //이미지 설정
         RectTransform catchRect = catchInfo.GetComponent<RectTransform>();
         catchRect.sizeDelta = new Vector2(800, 600);
+
+        Record record = item as Record;
+        catchBook.transform.GetChild(0).GetComponent<Text>().text = record.CONTENT.ToString();
     }
 }
