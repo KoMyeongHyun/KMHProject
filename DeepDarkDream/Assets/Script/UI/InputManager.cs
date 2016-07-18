@@ -18,8 +18,7 @@ public class InputManager : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
     {
-//        Vector2 hotspot = new Vector2(defaultCursor.width * DefaultHotSpot.x, defaultCursor.height * DefaultHotSpot.y);
-//        Cursor.SetCursor(defaultCursor, hotspot, CursorMode.Auto);
+        ShowCursor();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
@@ -38,12 +37,14 @@ public class InputManager : MonoBehaviour {
     {
         //다른 클릭 입력 처리
         
-        //if(Input.GetKeyDown(KeyCode.Tab))
-        //{
-        //    Application.LoadLevel("Title");
-        //}
+        if(Input.GetKeyDown(KeyCode.Tab))
+        {
+            ShowCursor();
+            Application.LoadLevel("Title");
+        }
 
-        if (inven.GetComponent<Inventory>().catchInfo.activeSelf == true)
+        if (inven.GetComponent<Inventory>().catchInfo.activeSelf == true
+             || inven.GetComponent<Inventory>().CatchRecord.isActiveAndEnabled == true)
         {
             return;
         }
@@ -56,10 +57,7 @@ public class InputManager : MonoBehaviour {
 
             if(openInven)
             {
-                Vector2 hotspot = new Vector2(defaultCursor.width * DefaultHotSpot.x, defaultCursor.height * DefaultHotSpot.y);
-                Cursor.SetCursor(defaultCursor, hotspot, CursorMode.Auto);
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
+                ShowCursor();
 
                 inven.transform.position = invenPos;
                 player.setStopBehavior(true);
@@ -75,23 +73,31 @@ public class InputManager : MonoBehaviour {
        
     }
 
+    private void ShowCursor()
+    {
+        Vector2 hotspot = new Vector2(defaultCursor.width * DefaultHotSpot.x, defaultCursor.height * DefaultHotSpot.y);
+        Cursor.SetCursor(defaultCursor, hotspot, CursorMode.Auto);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+
     public void ChangeCursor()
     {
         //Vector2 hotspot = new Vector2(handCursor.width * handHotSpot.x, handCursor.height * handHotSpot.y);
         //Cursor.SetCursor(handCursor, hotspot, CursorMode.Auto);
-        if (Cursor.visible == true)
-        {
-            return;
-        }
+        //if (Cursor.visible == true)
+        //{
+        //    return;
+        //}
         
 //        Cursor.visible = true;
     }
-    public void hideCursor()
+    public void HideCursor()
     {
-        if(Cursor.visible == false)
-        {
-            return;
-        }
+        //if(Cursor.visible == false)
+        //{
+        //    return;
+        //}
         
 //        Cursor.visible = false;
     }

@@ -24,6 +24,7 @@ public class CrosshairGUI : MonoBehaviour
     private Ray playerAim;
     private Camera playerCam;
     private InputManager inputManager;
+    private Inventory inven;
 
     void Awake()
     {
@@ -44,6 +45,7 @@ public class CrosshairGUI : MonoBehaviour
         }
 
         inputManager = GameObject.FindGameObjectWithTag("Canvas").GetComponent<InputManager>();
+        inven = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>();
     }
 
     void Update()
@@ -63,8 +65,8 @@ public class CrosshairGUI : MonoBehaviour
             m_UseReticle = false;
         }
 
-        //아이템창이 켜져 있으면 둘다 false
-        if (inputManager.OpenInven)
+        //아이템창이나 catch창 켜져 있으면 둘다 false
+        if (inputManager.OpenInven || inven.catchInfo.activeSelf || inven.CatchRecord.isActiveAndEnabled)
         {
             m_DefaultReticle = false;
             m_UseReticle = false;
@@ -82,18 +84,20 @@ public class CrosshairGUI : MonoBehaviour
         }
         else
         {
-            Cursor.visible = (false);
-            Cursor.lockState = CursorLockMode.Locked;
+            //Cursor.visible = (false);
+            //Cursor.lockState = CursorLockMode.Locked;
         }
     }
 
     void OnGUI()
     {
         if (m_bIsCrosshairVisible)
+        {
             if (m_DefaultReticle)
             {
                 GUI.DrawTexture(m_crosshairRect, m_crosshairTexture);
             }
+        }
         if (m_UseReticle)
         {
             GUI.DrawTexture(m_crosshairRect, m_useTexture);

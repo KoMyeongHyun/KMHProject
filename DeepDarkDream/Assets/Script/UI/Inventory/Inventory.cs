@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.UI;
 
 
 public class Inventory : MonoBehaviour
@@ -13,10 +13,13 @@ public class Inventory : MonoBehaviour
 
     public GameObject tooltip;
     public GameObject catchInfo;
-    public GameObject catchBook;
+    //public GameObject catchBook;
+    [SerializeField]
+    private CatchRecord catchRecord;
+    public CatchRecord CatchRecord { get { return catchRecord; } }
 
     //private Image sourceImg;
-    public Image bookImg;
+    //public Image bookImg;
 
     public AudioClip lockDoor;
     public AudioClip usedKey;
@@ -146,22 +149,14 @@ public class Inventory : MonoBehaviour
         catchInfo.transform.GetChild(2).GetComponent<Text>().text = "Desc";
         //inprogress true로 만들면
     }
-    public void CloseCatchInfo()
+    //public void CloseCatchInfo()
+    //{
+    //    catchInfo.SetActive(false);
+    //    catchBook.SetActive(false);
+    //}
+    public void ShowCatchBook(Item _item)
     {
-        catchInfo.SetActive(false);
-        catchBook.SetActive(false);
-    }
-    public void ShowCatchBook(Item item)
-    {
-        //사이즈 설정
-
-        catchBook.SetActive(true);
-        catchBook.transform.localPosition = Vector3.zero;
-        //이미지 설정
-        RectTransform catchRect = catchInfo.GetComponent<RectTransform>();
-        catchRect.sizeDelta = new Vector2(800, 600);
-
-        Record record = item as Record;
-        catchBook.transform.GetChild(0).GetComponent<Text>().text = record.CONTENT.ToString();
+        catchRecord.gameObject.SetActive(true);
+        catchRecord.SetRecord(_item);
     }
 }

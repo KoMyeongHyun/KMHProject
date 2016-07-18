@@ -115,7 +115,7 @@ public class Door : MonoBehaviour
             }
             else
             {
-                inputManager.hideCursor();
+                inputManager.HideCursor();
             }
 
         }
@@ -124,7 +124,7 @@ public class Door : MonoBehaviour
     public void OnTriggerExit(Collider col)
     {
         //커서 없애기
-        inputManager.hideCursor();
+        inputManager.HideCursor();
     }
 
     private bool Cast(Collider col)

@@ -59,10 +59,10 @@
      <Compile Include="Assets\Script\Disuse\DanceController.cs" />
      <Compile Include="Assets\Script\Disuse\Door.cs" />
      <Compile Include="Assets\Script\Disuse\MoveController.cs" />
-     <Compile Include="Assets\Script\Disuse\testtest.cs" />
      <Compile Include="Assets\Script\Interactive\Chest.cs" />
      <Compile Include="Assets\Script\Interactive\Door2.cs" />
      <Compile Include="Assets\Script\Interactive\DroppedItem.cs" />
+     <Compile Include="Assets\Script\Interactive\NextLevel.cs" />
      <Compile Include="Assets\Script\Interactive\Obstacle.cs" />
      <Compile Include="Assets\Script\Interactive\Obstacle_07.cs" />
      <Compile Include="Assets\Script\Interactive\RuneStone.cs" />
@@ -88,10 +88,10 @@
      <Compile Include="Assets\Script\Player\Stamina.cs" />
      <Compile Include="Assets\Script\UI\BeShot.cs" />
      <Compile Include="Assets\Script\UI\CatchInfo.cs" />
+     <Compile Include="Assets\Script\UI\CatchRecord.cs" />
      <Compile Include="Assets\Script\UI\InputManager.cs" />
      <Compile Include="Assets\Script\UI\Inventory\Inventory.cs" />
      <Compile Include="Assets\Script\UI\Inventory\Slot.cs" />
-     <Compile Include="Assets\Script\UI\NextLevel.cs" />
      <Compile Include="Assets\Script\UI\SoundController.cs" />
      <Compile Include="Assets\Script\UI\SoundPool.cs" />
      <Compile Include="Assets\Script\UI\Title.cs" />

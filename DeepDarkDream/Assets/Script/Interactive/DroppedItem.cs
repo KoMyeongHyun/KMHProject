@@ -5,22 +5,15 @@ public class DroppedItem : MonoBehaviour
 {
     //타입 선택에 따라 설정해야하는 값이 달라지도록 만들 것
     [SerializeField] private Sprite itemIcon;
-    //[SerializeField] private string itemName;
     [SerializeField] private int itemID;
     public int ItemID
     {
         set { itemID = value; }
         get { return itemID; }
     }
-    //[SerializeField] private ItemType itemType;
-    //[SerializeField] private string itemTargetName;
-    //[SerializeField] private string itemFuncName;
-    //[SerializeField] private float itemEffect;
 
     private InputManager inputManager;
     private Transform cameraTrans;
-    //private Item item;
-    //private GameObject player;
     private UnityStandardAssets.Characters.FirstPerson.FirstPersonController fpc;
     private static bool inProgress;
 
@@ -28,26 +21,31 @@ public class DroppedItem : MonoBehaviour
     {
         inputManager = GameObject.FindGameObjectWithTag("Canvas").GetComponent<InputManager>();
         cameraTrans = GameObject.FindGameObjectWithTag("MainCamera").transform;
-        //item = new Item(itemIcon, itemName, itemID, itemType, itemTargetName, itemFuncName, itemEffect);
 
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         fpc = player.GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
         inProgress = false;
     }
 
-    public void OnTriggerEnter(Collider col)
+    public void Update()
     {
+        if (Input.GetMouseButtonUp(0))
+        {
+            //아이템을 하나하나 먹을 수 있도록 마우스를 때면 초기화
+            inProgress = false;
+        }
     }
 
     public void OnTriggerStay(Collider col)
     {
-        
         if (col.tag == "Player")
         {
+            //툴팁이 켜져있거나 아이템창을 열고 있는 상황
             bool catchInfo = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>().catchInfo.activeSelf;
-            if (catchInfo || fpc.StopBehavior)
+            bool catchRecord = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>().CatchRecord.isActiveAndEnabled;
+            if (catchInfo || catchRecord || fpc.StopBehavior)
             {
-                //inputManager.hideCursor();
+                //inputManager.HideCursor();
                 return;
             }
 
@@ -69,27 +67,22 @@ public class DroppedItem : MonoBehaviour
                     Debug.Log("item get");
                     //아이템 정보 넘겨주기
                     GameObject.FindGameObjectWithTag("Inventory").SendMessage("AddItem", item);
-                    inputManager.hideCursor();
+                    inputManager.HideCursor();
                     Destroy(gameObject);
-                }
-                else if (Input.GetMouseButtonUp(0))
-                {
-                    //아이템 하나하나 먹을 수 있도록 마우스를 때면 초기화
-                    inProgress = false;
                 }
             }
             else
             {
                 //하나라도 트루면 지우지 말 것
-                inputManager.hideCursor();
+                inputManager.HideCursor();
             }
-        }
+        }   
     }
 
     public void OnTriggerExit(Collider col)
     {
         //커서 없애기
-        inputManager.hideCursor();
+        inputManager.HideCursor();
     }
 
     private bool Cast(Collider col)

@@ -52,7 +52,7 @@ public class ItemParser : MonoBehaviour
     IEnumerator ParseItem(string _path)
     {
         WWW www = new WWW(_path);
-        yield return null;
+        yield return www;
 
         XmlDocument xmlDoc = LoadXML(www);
 

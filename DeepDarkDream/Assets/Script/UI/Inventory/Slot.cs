@@ -51,6 +51,9 @@ public class Slot : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
                 GameObject.FindGameObjectWithTag(item.TARGET_NAME).SendMessage(item.FUNC_NAME, item.EFFECT);
                 AddItemCount(-1);
                 break;
+            case ItemType.RECORD:
+                GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>().ShowCatchBook(item);
+                break;
         }
     }
 

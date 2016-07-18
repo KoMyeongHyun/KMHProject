@@ -2,8 +2,8 @@
 using System.Collections;
 //using UnityEngine.EventSystems;
 
-public class CatchInfo : MonoBehaviour {
-
+public class CatchInfo : MonoBehaviour
+{
     private bool activity;
 	// Use this for initialization
 	void Start ()
@@ -18,7 +18,7 @@ public class CatchInfo : MonoBehaviour {
         {
             if(activity == true)
             {
-                this.gameObject.SetActive(false);
+                gameObject.SetActive(false);
                 activity = false;
                 return;
             }
