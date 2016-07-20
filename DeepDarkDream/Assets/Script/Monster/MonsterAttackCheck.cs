@@ -68,7 +68,10 @@ public class MonsterAttackCheck : MonoBehaviour
             {
                 --attackInfo.count;
 
-                GameObject.FindGameObjectWithTag("Player").SendMessage("BeShotFromMonster", 70.0f);
+                Hashtable data = new Hashtable();
+                data.Add("Damage", 70.0f);
+                NotificationCenter.DefaultCenter.PostNotification(this, "BeShotFromMonster", data);
+                //GameObject.FindGameObjectWithTag("Player").SendMessage("BeShotFromMonster", 70.0f);
                 Debug.Log("플레이어 타격 당함");
             }
         }

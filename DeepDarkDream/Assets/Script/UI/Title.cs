@@ -91,15 +91,15 @@ public class Title : MonoBehaviour
         {
             loadingPercentage = (int)(asyncLoad.progress * 100);
             percentageText.GetComponent<GUIText>().text = loadingPercentage + "%";
-            pb.localScale = new Vector3(asyncLoad.progress, pb.localScale.y, pb.localScale.z);
+            pb.localScale = new Vector3(asyncLoad.progress * 2.0f, pb.localScale.y, pb.localScale.z);
             yield return null;
         }
 
         loadingPercentage = 100;
         percentageText.GetComponent<GUIText>().text = loadingPercentage + "%";
-        pb.localScale = new Vector3(1.0f, pb.localScale.y, pb.localScale.z);
+        pb.localScale = new Vector3(1.0f * 2.0f, pb.localScale.y, pb.localScale.z);
 
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
         asyncLoad.allowSceneActivation = true;
         
         //progress = false;

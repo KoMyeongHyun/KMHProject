@@ -92,9 +92,11 @@
      <Compile Include="Assets\Script\UI\InputManager.cs" />
      <Compile Include="Assets\Script\UI\Inventory\Inventory.cs" />
      <Compile Include="Assets\Script\UI\Inventory\Slot.cs" />
+     <Compile Include="Assets\Script\UI\NotificationCenter.cs" />
      <Compile Include="Assets\Script\UI\SoundController.cs" />
      <Compile Include="Assets\Script\UI\SoundPool.cs" />
      <Compile Include="Assets\Script\UI\Title.cs" />
+     <Compile Include="Assets\Script\UI\Title2.cs" />
      <Compile Include="Assets\Tower Effect\Standard Assets\Character Controllers\Sources\Scripts\MouseLook.cs" />
      <None Include="Assets\Standard Assets\Effects\GlassRefraction\Shaders\GlassStainedBumpDistort.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_BloomAndFlares\BlendOneOne.shader" />

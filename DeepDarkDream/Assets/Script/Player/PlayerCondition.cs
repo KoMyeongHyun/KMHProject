@@ -33,6 +33,8 @@ public class PlayerCondition : MonoBehaviour
         motionBlur = GameObject.FindGameObjectWithTag("MainCamera").
             GetComponent<UnityStandardAssets.ImageEffects.MotionBlur>();
         motionBlurSound = new SoundController(motionBlur.gameObject);
+
+        NotificationCenter.DefaultCenter.AddObserver(this, "BeShotFromMonster");
     }
 	
 	// Update is called once per frame
@@ -40,11 +42,11 @@ public class PlayerCondition : MonoBehaviour
     {
         //test
         if (Input.GetKeyDown(KeyCode.Q))
-            stamina.ChangeStaminaOfSpirit(mentality.DamagedMentality(300.0f));
+        { stamina.ChangeStaminaOfSpirit(mentality.DamagedMentality(300.0f)); }
         if (Input.GetKeyDown(KeyCode.E))
-            stamina.ChangeStaminaOfSpirit(mentality.RecoverMentality(300.0f));
+        { stamina.ChangeStaminaOfSpirit(mentality.RecoverMentality(300.0f)); }
         if (Input.GetKeyDown(KeyCode.R))
-            stamina.FullRecovery();
+        { stamina.FullRecovery(); }
 
         bool result = stamina.CalculateStamina();
         if (result == false)
@@ -81,7 +83,9 @@ public class PlayerCondition : MonoBehaviour
         {
             lacklustreTime += Time.deltaTime;
             if (lacklustreTime > 5.0f)
+            {
                 StartCoroutine(DecreaseMentality());
+            }
         }
 
         DisplayCondition();
@@ -138,10 +142,10 @@ public class PlayerCondition : MonoBehaviour
         stamina.ChangeStaminaOfSpirit(mentality.DamagedMentality(value));
     }
 
-    public void BeShotFromMonster(int damage)
+    public void BeShotFromMonster(NotificationCenter.Notification _notification) //함수 sender에 접근 가능
     {
         //피격 데미지 주기
-        DamagedMentality(damage);
+        DamagedMentality((float)_notification.data["Damage"]);
 
         //화면에 피격 표시 해주기
         GameObject bs = Instantiate(beShot);

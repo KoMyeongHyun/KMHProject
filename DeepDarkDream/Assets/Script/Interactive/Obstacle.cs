@@ -25,7 +25,11 @@ public class Obstacle : MonoBehaviour
 
     void HitPlayer(Transform hit)
     {
-        hit.SendMessage("BeShotFromMonster", damage);
+        Hashtable data = new Hashtable();
+        data.Add("Damage", damage);
+        NotificationCenter.DefaultCenter.PostNotification(this, "BeShotFromMonster", data);
+        //hit.SendMessage("BeShotFromMonster", damage);
+
         soundController.ChangeAndPlay("Obstacle1");
         StartCoroutine(KnockbackPlayer(hit));
         StartCoroutine(StunPlayer(hit));
