@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System.Xml;
 using System.Text;
 using System.IO;
@@ -15,6 +16,11 @@ public class ItemParser : MonoBehaviour
         
         path = GetPath("Record.xml");
         StartCoroutine(ParseRecord(path));
+
+        ItemFactory.Instance.RegisterType(ItemType.CONSUMPTION, new ConsumptionItemCreator());
+        ItemFactory.Instance.RegisterType(ItemType.KIT, new ItemCreator());
+        ItemFactory.Instance.RegisterType(ItemType.WEAPON, new ItemCreator());
+        ItemFactory.Instance.RegisterType(ItemType.RECORD, new RecordItemCreator());
     }
 
     //XML을 다음과 같이 읽어 올 수도 있다.
@@ -67,6 +73,7 @@ public class ItemParser : MonoBehaviour
             foreach(XmlNode child in node.ChildNodes)
             {
                 //아이템 컨테이너에 아이템 정보 셋팅
+                //xml 스키마 정보를 일정하게 유지하기 위해 일단 값이 없어도 받아온다.
                 int id = int.Parse(child.Attributes.GetNamedItem("id").Value);
                 string name = child.Attributes.GetNamedItem("name").Value;
                 string type_str = child.Attributes.GetNamedItem("type").Value;
@@ -75,22 +82,31 @@ public class ItemParser : MonoBehaviour
                 string funcName = child.Attributes.GetNamedItem("funcName").Value;
                 float effect = float.Parse(child.Attributes.GetNamedItem("effect").Value);
 
-                //type 넣어주면 알아서 생성하게 추후 factory 패턴으로 바꿀 것
-                Item item;
-                if (type == ItemType.RECORD)
-                {
-                    item = new Record();
-                }
-                else
-                {
-                    item = new Item();
-                }
-                item.ID = id;
-                item.NAME = name;
-                item.TYPE = type;
-                item.TARGET_NAME = targetName;
-                item.FUNC_NAME = funcName;
-                item.EFFECT = effect;
+                //Hashtable info = new Hashtable();
+                Dictionary<string, object> info = new Dictionary<string, object>();
+                info.Add("id", id);
+                info.Add("name", name);
+                info.Add("type", type);
+                info.Add("targetName", targetName);
+                info.Add("funcName", funcName);
+                info.Add("effect", effect);
+                //맞아 Record는 Record로 생성 해줘야 한다.
+                Item item = ItemFactory.Instance.CreateItem(type, info);
+                //Item item;
+                //if (type == ItemType.RECORD)
+                //{
+                //    item = new Record();
+                //}
+                //else
+                //{
+                //    item = new Item();
+                //}
+                //item.ID = id;
+                //item.NAME = name;
+                //item.TYPE = type;
+                //item.TARGET_NAME = targetName;
+                //item.FUNC_NAME = funcName;
+                //item.EFFECT = effect;
 
                 ItemContainer.Instance.AddItem(item);
             }

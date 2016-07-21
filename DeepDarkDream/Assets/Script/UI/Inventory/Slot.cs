@@ -42,19 +42,30 @@ public class Slot : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
     {
         Item item = inven.items[slotNum];
 
-        if (item.NAME == null || item.TARGET_NAME == null || item.FUNC_NAME == null)
-            return;
-
-        switch(item.TYPE)
+        //if (item.NAME == null || item.TARGET_NAME == null || item.FUNC_NAME == null)
+        if (item.NAME == null)
         {
-            case ItemType.CONSUMPTION:
-                GameObject.FindGameObjectWithTag(item.TARGET_NAME).SendMessage(item.FUNC_NAME, item.EFFECT);
-                AddItemCount(-1);
-                break;
-            case ItemType.RECORD:
-                GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>().ShowCatchBook(item);
-                break;
+            return;
         }
+
+        //타입에 따라 다른 행동이 실행
+        //기능을 위임한다.
+        item.Use();
+
+        if(item.TYPE == ItemType.CONSUMPTION)
+        {
+            AddItemCount(-1);
+        }
+        //switch(item.TYPE)
+        //{
+        //    case ItemType.CONSUMPTION:
+        //        GameObject.FindGameObjectWithTag(item.TARGET_NAME).SendMessage(item.FUNC_NAME, item.EFFECT);
+        //        AddItemCount(-1);
+        //        break;
+        //    case ItemType.RECORD:
+        //        GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>().ShowCatchBook(item);
+        //        break;
+        //}
     }
 
     private void AddItemCount(int count)

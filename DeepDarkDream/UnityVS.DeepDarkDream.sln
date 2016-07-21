@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityVS.DeepDarkDream.CSharp.Plugins", "UnityVS.DeepDarkDream.CSharp.Plugins.csproj", "{1C55571D-0CC2-EBD5-7001-CB97591C3C10}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityVS.DeepDarkDream.CSharp", "UnityVS.DeepDarkDream.CSharp.csproj", "{4B6CBD7A-15C9-FF53-01F2-05B85EAE62F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityVS.DeepDarkDream.CSharp.Editor", "UnityVS.DeepDarkDream.CSharp.Editor.csproj", "{47989246-FB81-5E0F-68C6-6E81BA7855E7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1C55571D-0CC2-EBD5-7001-CB97591C3C10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C55571D-0CC2-EBD5-7001-CB97591C3C10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C55571D-0CC2-EBD5-7001-CB97591C3C10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C55571D-0CC2-EBD5-7001-CB97591C3C10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B6CBD7A-15C9-FF53-01F2-05B85EAE62F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B6CBD7A-15C9-FF53-01F2-05B85EAE62F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B6CBD7A-15C9-FF53-01F2-05B85EAE62F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B6CBD7A-15C9-FF53-01F2-05B85EAE62F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47989246-FB81-5E0F-68C6-6E81BA7855E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47989246-FB81-5E0F-68C6-6E81BA7855E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47989246-FB81-5E0F-68C6-6E81BA7855E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47989246-FB81-5E0F-68C6-6E81BA7855E7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

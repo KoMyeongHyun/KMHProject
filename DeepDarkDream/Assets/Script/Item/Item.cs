@@ -11,37 +11,47 @@ public enum ItemType
 
 public class Item
 {
+    private ItemUse use;
     private Sprite icon;
     private int id;
     private string name;
     private ItemType type;
-    private string targetName;
-    private string funcName;
-    private float effect;
+    //private string targetName;
+    //private string funcName;
+    //private float effect;
 
     public Item() { }
-    public Item(Sprite _icon, string _name, int _id, ItemType _type, string _targetName, string _funcName, float _effect)
+    //public Item(Sprite _icon, string _name, int _id, ItemType _type, string _targetName, string _funcName, float _effect)
+    public Item(int _id, string _name, ItemType _type)
     {
+        //use에 대한 설정 해줄 것
         //itemIcon = Resources.Load<Sprite>("" + iconName);
-        icon = _icon;
+        //icon = _icon;
         name = _name;
         id = _id;
         type = _type;
-        targetName = _targetName;
-        funcName = _funcName;
-        effect = _effect;
+        //targetName = _targetName;
+        //funcName = _funcName;
+        //effect = _effect;
     }
     public Item(Item _item)
     {
+        //use에 대한 설정 해줄 것
+        use = _item.use;
         icon = _item.icon;
         name = _item.name;
         id = _item.id;
         type = _item.type;
-        targetName = _item.targetName;
-        funcName = _item.funcName;
-        effect = _item.effect;
+        //targetName = _item.targetName;
+        //funcName = _item.funcName;
+        //effect = _item.effect;
     }
 
+    public ItemUse USE
+    {
+        set { use = value; }
+        get { return use; }
+    }
     public Sprite ICON
     {
         set { icon = value; }
@@ -62,19 +72,24 @@ public class Item
         set { type = value; }
         get { return type; }
     }
-    public string TARGET_NAME
+    //public string TARGET_NAME
+    //{
+    //    set { targetName = value; }
+    //    get { return targetName; }
+    //}
+    //public string FUNC_NAME
+    //{
+    //    set { funcName = value; }
+    //    get { return funcName; }
+    //}
+    //public float EFFECT
+    //{
+    //    set { effect = value; }
+    //    get { return effect; }
+    //}
+
+    public virtual void Use()
     {
-        set { targetName = value; }
-        get { return targetName; }
-    }
-    public string FUNC_NAME
-    {
-        set { funcName = value; }
-        get { return funcName; }
-    }
-    public float EFFECT
-    {
-        set { effect = value; }
-        get { return effect; }
+        use.Use();
     }
 }

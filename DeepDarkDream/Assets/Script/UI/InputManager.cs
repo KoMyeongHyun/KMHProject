@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class InputManager : MonoBehaviour {
@@ -40,7 +41,7 @@ public class InputManager : MonoBehaviour {
         if(Input.GetKeyDown(KeyCode.Tab))
         {
             ShowCursor();
-            Application.LoadLevel("Title");
+            SceneManager.LoadScene("Title");
         }
 
         if (inven.GetComponent<Inventory>().catchInfo.activeSelf == true

@@ -1,6 +1,6 @@
-﻿using System;
+﻿using UnityEngine;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 
@@ -8,11 +8,18 @@ class Record : Item
 {
     private StringBuilder content;
 
+    public Record(int _id, string _name, ItemType _type) 
+        : base(_id, _name, _type)
+    { }
+
     public StringBuilder CONTENT
     {
         set { content = value; }
         get { return content; }
     }
-    //자료구조 사용해서 xml로 읽어온 내용 끊어서 보관할 것 
-    //stringBuilder 사용 검토해볼 것  string + string 사용은 자제
+
+    public override void Use()
+    {
+        GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>().ShowCatchBook(this as Item);
+    }
 }

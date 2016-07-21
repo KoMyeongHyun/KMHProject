@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityStandardAssets.CrossPlatformInput;
 
 [RequireComponent(typeof (GUITexture))]
@@ -11,7 +12,9 @@ public class ForcedReset : MonoBehaviour
         if (CrossPlatformInputManager.GetButtonDown("ResetObject"))
         {
             //... reload the scene
-            Application.LoadLevelAsync(Application.loadedLevelName);
+            //Application.LoadLevelAsync(Application.loadedLevelName);
+            string sceneName = SceneManager.GetActiveScene().name;
+            SceneManager.LoadScene(sceneName);
         }
     }
 }
