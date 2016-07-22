@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-class ItemFactory : MonoBehaviour
+class ItemFactory
 {
     private static ItemFactory instance = null;
     public static ItemFactory Instance
@@ -12,8 +12,7 @@ class ItemFactory : MonoBehaviour
         {
             if(instance == null)
             {
-                GameObject obj = new GameObject("Item Factory");
-                instance = obj.AddComponent<ItemFactory>();
+                instance = new ItemFactory();
             }
             return instance;
         }

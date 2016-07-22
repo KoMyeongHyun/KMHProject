@@ -31,6 +31,8 @@ public class InputManager : MonoBehaviour {
         inven.transform.position = hideInvenPos;
         openInven = false;
         //inven.SetActive(openInven);
+
+        DontDestroyOnLoad(this);
     }
 	
 	// Update is called once per frame
@@ -41,6 +43,13 @@ public class InputManager : MonoBehaviour {
         if(Input.GetKeyDown(KeyCode.Tab))
         {
             ShowCursor();
+            SaveData.Instance.LoadingStageLevel = 0;
+            //player, canvas 존재하면 지우기
+            GameObject obj = GameObject.FindGameObjectWithTag("Player");
+            Destroy(obj);
+            obj = GameObject.FindGameObjectWithTag("Canvas");
+            Destroy(obj);
+
             SceneManager.LoadScene("Title");
         }
 

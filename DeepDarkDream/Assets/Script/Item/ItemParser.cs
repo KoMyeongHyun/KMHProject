@@ -8,19 +8,37 @@ using System;
 
 public class ItemParser : MonoBehaviour
 {
+    private bool loadingCompletion;
+    public bool LoadingCompletion
+    {
+        get
+        {
+            return loadingCompletion;
+        }
+    }
+
+    //item 정보를 전부 읽은 다음 Record 정보를 읽기 위한 검사용
+    private bool itemParserCompletion;
+
     void Awake()
     {
-        //이전 씬에서 데이터 로딩할 때 진행할 것
-        string path = GetPath("ItemInfo.xml");
-        StartCoroutine(ParseItem(path));
-        
-        path = GetPath("Record.xml");
-        StartCoroutine(ParseRecord(path));
+        loadingCompletion = false;
+        itemParserCompletion = false;
+    }
 
-        ItemFactory.Instance.RegisterType(ItemType.CONSUMPTION, new ConsumptionItemCreator());
-        ItemFactory.Instance.RegisterType(ItemType.KIT, new ItemCreator());
-        ItemFactory.Instance.RegisterType(ItemType.WEAPON, new ItemCreator());
-        ItemFactory.Instance.RegisterType(ItemType.RECORD, new RecordItemCreator());
+    public void LoadItem(int _stage)
+    {
+        //string path = GetPath("ItemInfo.xml");
+        StringBuilder xmlName = new StringBuilder();
+        xmlName.AppendFormat("ItemInfo{0}.xml", _stage);
+        string path = GetPath(xmlName.ToString());
+        StartCoroutine(ParseItem(path));
+
+        //path = GetPath("Record.xml");
+        xmlName.Length = 0;
+        xmlName.AppendFormat("Record{0}.xml", _stage);
+        path = GetPath(xmlName.ToString());
+        StartCoroutine(ParseRecord(path));
     }
 
     //XML을 다음과 같이 읽어 올 수도 있다.
@@ -29,7 +47,6 @@ public class ItemParser : MonoBehaviour
     {
         StringBuilder path = new StringBuilder();
 #if (UNITY_EDITOR || UNITY_STANDALONE_WIN)
-        //path.Append("file:///");
         path.AppendFormat("file:///{0}/{1}", Application.streamingAssetsPath, _xmlName);
 #elif UNITY_ANDROID
         path.AppendFormat("jar:file://{0}!/assets/{1}", Application.dataPath, _xmlName);
@@ -90,33 +107,24 @@ public class ItemParser : MonoBehaviour
                 info.Add("targetName", targetName);
                 info.Add("funcName", funcName);
                 info.Add("effect", effect);
-                //맞아 Record는 Record로 생성 해줘야 한다.
-                Item item = ItemFactory.Instance.CreateItem(type, info);
-                //Item item;
-                //if (type == ItemType.RECORD)
-                //{
-                //    item = new Record();
-                //}
-                //else
-                //{
-                //    item = new Item();
-                //}
-                //item.ID = id;
-                //item.NAME = name;
-                //item.TYPE = type;
-                //item.TARGET_NAME = targetName;
-                //item.FUNC_NAME = funcName;
-                //item.EFFECT = effect;
 
+                Item item = ItemFactory.Instance.CreateItem(type, info);
                 ItemContainer.Instance.AddItem(item);
             }
         }
+
+        itemParserCompletion = true;
     }
 
     IEnumerator ParseRecord(string _path)
     {
         WWW www = new WWW(_path);
-        yield return null;
+        yield return www;
+
+        while(itemParserCompletion == false)
+        {
+            yield return null;
+        }
 
         XmlDocument xmlDoc = LoadXML(www);
 
@@ -145,5 +153,7 @@ public class ItemParser : MonoBehaviour
                 Debug.Log(content);
             }
         }
+
+        loadingCompletion = true;
     }
 }

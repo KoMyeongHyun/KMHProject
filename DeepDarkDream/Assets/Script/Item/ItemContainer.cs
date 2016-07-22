@@ -3,22 +3,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-class ItemContainer : MonoBehaviour
+class ItemContainer
 {
-    //private static ItemContainer instance = null;
-    //public static ItemContainer Instance
-    //{
-    //    get
-    //    {
-    //        if(instance == null)
-    //        {
-    //            instance = new ItemContainer();
-    //        }
-    //        return instance;
-    //    }
-    //}
-
-    //임시로
     private static ItemContainer instance = null;
     public static ItemContainer Instance
     {
@@ -26,8 +12,7 @@ class ItemContainer : MonoBehaviour
         {
             if (instance == null)
             {
-                GameObject obj = new GameObject("Item Container");
-                instance = obj.AddComponent<ItemContainer>();
+                instance = new ItemContainer();
             }
             return instance;
         }

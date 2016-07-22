@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Items>
+  <Item id="1" name="book" type="RECORD" targetName="" funcName="" effect="0" />
+  <Item id="2" name="key" type="KIT" targetName="" funcName="" effect="0" />
+  <Item id="3" name="potion" type="CONSUMPTION" targetName="Player" funcName="RecoverMentalityForMedicine" effect="300" />
+  <Item id="4" name="potion" type="CONSUMPTION" targetName="Player" funcName="RecoverMentalityForMedicine" effect="300" />
+  <Item id="5" name="KKK" type="KIT" targetName="" funcName="" effect="0" />
+  <Item id="6" name="r" type="RECORD" targetName="" funcName="" effect="0" />
+  <Item id="1000" name="potion" type="CONSUMPTION" targetName="Player" funcName="RecoverMentalityForMedicine" effect="300" />
+</Items>

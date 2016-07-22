@@ -20,14 +20,6 @@ public class Inventory : MonoBehaviour
 
     //private Image sourceImg;
     //public Image bookImg;
-
-    public AudioClip lockDoor;
-    public AudioClip usedKey;
-    public AudioClip openDoor;
-    public AudioClip obstacle1;
-    public AudioClip breath;
-    public AudioClip zombieSound;
-
     //public bool catchInfoLock;
 
     void Start()
@@ -59,16 +51,6 @@ public class Inventory : MonoBehaviour
         transform.position = new Vector3(5000.0f, 5000.0f);
 
         //sourceImg = catchInfo.GetComponent<Image>();
-        
-        //singleton 다음 스테이지로 넘어갔을 때 저장 값이 남아있다.
-        //로딩씬을 만들어서 그 곳으로 옮길 것
-        //아 이게 게임오브젝트가 아니라서 지워지지 않는구나
-        SoundPool.Instance.AddSoundClip("LockDoor", lockDoor);
-        SoundPool.Instance.AddSoundClip("UsedKey", usedKey);
-        SoundPool.Instance.AddSoundClip("OpenDoor", openDoor);
-        SoundPool.Instance.AddSoundClip("Obstacle1", obstacle1);
-        SoundPool.Instance.AddSoundClip("호흡소리", breath);
-        SoundPool.Instance.AddSoundClip("ZombieSound", zombieSound);
     }
 
     void OnDestory()

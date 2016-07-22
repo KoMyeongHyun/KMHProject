@@ -20,20 +20,20 @@ public class CharacterCamera : MonoBehaviour {
     private Transform cameraTransform;
 
     private float f_maxRotation;
-    private CharacterController c_charactorControl;
+    //private CharacterController c_charactorControl;
 
     //타킷
-    private float f_targetHeight = Mathf.Infinity;
-    private Vector3 v3_centerOffset = Vector3.zero;
+    //private float f_targetHeight = Mathf.Infinity;
+    //private Vector3 v3_centerOffset = Vector3.zero;
 
 	// Use this for initialization
 	void Awake ()
     {
         cameraTransform = Camera.main.transform;
         target = GameObject.FindWithTag("Player").transform;
-        c_charactorControl = GameObject.FindWithTag("Player").GetComponent<CharacterController>();
+        //c_charactorControl = GameObject.FindWithTag("Player").GetComponent<CharacterController>();
 
-        v3_centerOffset = target.GetComponent<Collider>().bounds.center - target.position;
+        //v3_centerOffset = target.GetComponent<Collider>().bounds.center - target.position;
     }
 	
 	// Update is called once per frame

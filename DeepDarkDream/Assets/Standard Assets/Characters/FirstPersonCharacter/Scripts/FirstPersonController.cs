@@ -100,7 +100,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
             stopMove = false;
             knockback = false;
             invincible = false;
-            
+
+            DontDestroyOnLoad(this);
         }
 
 
