@@ -48,24 +48,9 @@ public class Slot : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
             return;
         }
 
-        //타입에 따라 다른 행동이 실행
-        //기능을 위임한다.
-        item.Use();
-
-        if(item.TYPE == ItemType.CONSUMPTION)
-        {
-            AddItemCount(-1);
-        }
-        //switch(item.TYPE)
-        //{
-        //    case ItemType.CONSUMPTION:
-        //        GameObject.FindGameObjectWithTag(item.TARGET_NAME).SendMessage(item.FUNC_NAME, item.EFFECT);
-        //        AddItemCount(-1);
-        //        break;
-        //    case ItemType.RECORD:
-        //        GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>().ShowCatchBook(item);
-        //        break;
-        //}
+        //타입에 따라 다른 행동이 실행, 기능을 따로 캡슐화 시켜 위임
+        int useCount = item.Use();
+        AddItemCount(useCount);
     }
 
     private void AddItemCount(int count)

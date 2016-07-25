@@ -74,9 +74,20 @@ public class DataLoad : MonoBehaviour
         {
             yield return null;
         }
+        while(SettingParser.Instance.LoadingCompletion == false)
+        {
+            yield return null;
+        }
+
+        SaveData.Instance.InitStageInfo();
         SaveData.Instance.SetLoadedStage(level);
         //타이틀로 돌아가지 않는 이상 UI, character 가져간다.
-        //스테이지 이동 시 플레이어 좌표 변경
         //타이틀로 이동 시 전부 삭제
+        //스테이지 이동 시 플레이어 좌표 변경
+        GameObject obj = GameObject.FindGameObjectWithTag("Player");
+        if(obj != null)
+        {
+            obj.transform.position = SaveData.Instance.GetStartPos(level);
+        }
     }
 }

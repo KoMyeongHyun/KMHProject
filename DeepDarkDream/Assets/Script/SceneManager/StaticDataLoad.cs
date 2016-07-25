@@ -23,5 +23,8 @@ public class StaticDataLoad : MonoBehaviour
         ItemFactory.Instance.RegisterType(ItemType.KIT, new ItemCreator());
         ItemFactory.Instance.RegisterType(ItemType.WEAPON, new ItemCreator());
         ItemFactory.Instance.RegisterType(ItemType.RECORD, new RecordItemCreator());
+
+        //JSON GameSetting Load
+        SettingParser.Instance.LoadSetting();
     }
 }

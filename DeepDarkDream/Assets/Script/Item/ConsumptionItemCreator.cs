@@ -12,8 +12,8 @@ class ConsumptionItemCreator : ItemCreator
         string funcName = (string)_info["funcName"];
         float effect = (float)_info["effect"];
 
-        Item item = new Item(id, name, type);
-        item.USE = new ConsumptionItem(targetName, funcName, effect);
+        ItemUse use = new ConsumptionItem(targetName, funcName, effect);
+        Item item = new Item(id, name, type, use);
 
         return item;
     }

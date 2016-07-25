@@ -3,7 +3,8 @@ using System.Collections.Generic;
 
 class DisuseItem : ItemUse
 {
-    public void Use()
+    public int Use()
     {
+        return 0;
     }
 }

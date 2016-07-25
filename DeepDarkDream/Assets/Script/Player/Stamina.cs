@@ -1,12 +1,17 @@
 ﻿using UnityEngine;
+using LitJson;
 using System.Collections;
 
 delegate bool InstructionStamina();
 
 public class Stamina
 {
-    public const float MAX_STAMINA = 1000.0f;
-    public const float PENALTY_STAMINA = MAX_STAMINA * 0.2f;
+    public readonly float MAX_STAMINA;
+    private readonly float PENALTY_STAMINA;
+    private readonly float CONSUME_SPEED_OF_RUN;
+    private readonly float CONSUME_SPEED_OF_SLOW_WALK;
+    private readonly float RECOVERY_SPEED_OF_WALK;
+    private readonly float RECOVERY_SPEED_OF_STOP;
 
     private float maxStaminaOfSpirit;
     public float MaxStaminaOfSpirit { get { return maxStaminaOfSpirit; } }
@@ -15,11 +20,6 @@ public class Stamina
     private bool penalty;
     public bool Penalty { get { return penalty; } }
 
-    private float consumeSpeed = 100.0f;
-    private float consumeSpeedOfSlowWalk = 30.0f;
-    private float recoverySpeedOfWalk = 10.0f;
-    private float recoverySpeedOfStop = 30.0f;
-
     private InstructionStamina[] instructions;
 
     private UnityStandardAssets.Characters.FirstPerson.FirstPersonController player;
@@ -27,6 +27,16 @@ public class Stamina
     // Use this for initialization
     public Stamina()
     {
+        JsonData root = SettingParser.Instance.SettingData;
+        JsonData data = root["player"]["stamina"];
+        MAX_STAMINA = float.Parse(data["maxStamina"].ToString());
+        float percentage = float.Parse(data["penaltyLine(%)"].ToString()) * 0.01f;
+        PENALTY_STAMINA = MAX_STAMINA * percentage;
+        CONSUME_SPEED_OF_RUN = float.Parse(data["consumeSpeedOfRun"].ToString());
+        CONSUME_SPEED_OF_SLOW_WALK = float.Parse(data["consumeSpeedOfSlowWalk"].ToString());
+        RECOVERY_SPEED_OF_WALK = float.Parse(data["recoverySpeedOfWalk"].ToString());
+        RECOVERY_SPEED_OF_STOP = float.Parse(data["recoverySpeedOfStop"].ToString());
+
         maxStaminaOfSpirit = MAX_STAMINA;
         currentStamina = maxStaminaOfSpirit;
         penalty = false;
@@ -74,7 +84,7 @@ public class Stamina
 
     private bool SpendStaminaOfRun()
     {
-        currentStamina -= consumeSpeed * Time.deltaTime;
+        currentStamina -= CONSUME_SPEED_OF_RUN * Time.deltaTime;
 
         if (currentStamina < 0.0f)
         {
@@ -86,7 +96,7 @@ public class Stamina
     }
     private bool SpendStaminaOfSlowWalk()
     {
-        currentStamina -= consumeSpeedOfSlowWalk * Time.deltaTime;
+        currentStamina -= CONSUME_SPEED_OF_SLOW_WALK * Time.deltaTime;
 
         if (currentStamina < 0.0f)
         {
@@ -98,7 +108,7 @@ public class Stamina
     }
     private bool RecoverStaminaOfWalk()
     {
-        currentStamina += recoverySpeedOfWalk * Time.deltaTime;
+        currentStamina += RECOVERY_SPEED_OF_WALK * Time.deltaTime;
 
         if (currentStamina > maxStaminaOfSpirit)
         {
@@ -109,7 +119,7 @@ public class Stamina
     }
     private bool RecoverStaminaOfStop()
     {
-        currentStamina += recoverySpeedOfStop * Time.deltaTime;
+        currentStamina += RECOVERY_SPEED_OF_STOP * Time.deltaTime;
 
         if (currentStamina > maxStaminaOfSpirit)
         {

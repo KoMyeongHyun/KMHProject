@@ -35,20 +35,26 @@ public class InputManager : MonoBehaviour {
         DontDestroyOnLoad(this);
     }
 	
-	// Update is called once per frame
 	void Update ()
     {
-        //다른 클릭 입력 처리
-        
+        //추후 수정할 것
         if(Input.GetKeyDown(KeyCode.Tab))
         {
             ShowCursor();
             SaveData.Instance.LoadingStageLevel = 0;
+
             //player, canvas 존재하면 지우기
             GameObject obj = GameObject.FindGameObjectWithTag("Player");
+            Vector3 existingPos = obj.transform.position;
             Destroy(obj);
+
             obj = GameObject.FindGameObjectWithTag("Canvas");
             Destroy(obj);
+
+            //게임 종료 후 에러 방지
+            obj = new GameObject("AudioListener");
+            obj.AddComponent<AudioListener>();
+            obj.AddComponent<Camera>().transform.position = existingPos;
 
             SceneManager.LoadScene("Title");
         }

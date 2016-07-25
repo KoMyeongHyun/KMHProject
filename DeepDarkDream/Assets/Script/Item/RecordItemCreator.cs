@@ -9,8 +9,8 @@ class RecordItemCreator : ItemCreator
         string name = (string)_info["name"];
         ItemType type = (ItemType)_info["type"];
 
-        Item item = new Record(id, name, type);
-        item.USE = new DisuseItem();
+        Item item = new Record(id, name, type, new DisuseItem());
+        //item.USE = new DisuseItem();
 
         return item;
     }

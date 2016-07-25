@@ -88,16 +88,16 @@ public class PlayerCondition : MonoBehaviour
             }
         }
 
-        DisplayCondition();
+        //DisplayCondition();
 	}
 
     private void DisplayCondition()
     {
         //STAMINA_IMG_SIZE일 때 stamina 0
-        float staminaPos_x = STAMINA_IMG_SIZE - (stamina.CurrentStamina * STAMINA_IMG_SIZE / Stamina.MAX_STAMINA);
+        float staminaPos_x = STAMINA_IMG_SIZE - (stamina.CurrentStamina * STAMINA_IMG_SIZE / stamina.MAX_STAMINA);
         staminaTrans.localPosition = new Vector3(staminaPos_x, staminaTrans.localPosition.y, staminaTrans.localPosition.z);
 
-        float mentalityPos_y = MENTALITY_IMG_SIZE - (mentality.CurrentMentality * MENTALITY_IMG_SIZE / Mentality.MAX_MENTALITY);
+        float mentalityPos_y = MENTALITY_IMG_SIZE - (mentality.CurrentMentality * MENTALITY_IMG_SIZE / mentality.MAX_MENTALITY);
         mentalityTrans.localPosition = new Vector3(mentalityTrans.localPosition.x, -mentalityPos_y, mentalityTrans.localPosition.z);
     }
 

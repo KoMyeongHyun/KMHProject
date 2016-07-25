@@ -1,8 +1,8 @@
-using System;
 using UnityEngine;
+using System;
+using System.Collections;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityStandardAssets.Utility;
-using System.Collections;
 using Random = UnityEngine.Random;
 
 public enum WALK_STATE

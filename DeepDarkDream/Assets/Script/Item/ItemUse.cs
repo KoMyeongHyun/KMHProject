@@ -3,5 +3,5 @@ using System.Collections.Generic;
 
 public interface ItemUse
 {
-    void Use();
+    int Use();
 }

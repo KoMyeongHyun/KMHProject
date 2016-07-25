@@ -8,8 +8,8 @@ class Record : Item
 {
     private StringBuilder content;
 
-    public Record(int _id, string _name, ItemType _type) 
-        : base(_id, _name, _type)
+    public Record(int _id, string _name, ItemType _type, ItemUse _use) 
+        : base(_id, _name, _type, _use)
     { }
 
     public StringBuilder CONTENT
@@ -18,8 +18,9 @@ class Record : Item
         get { return content; }
     }
 
-    public override void Use()
+    public override int Use()
     {
         GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>().ShowCatchBook(this as Item);
+        return 0;
     }
 }

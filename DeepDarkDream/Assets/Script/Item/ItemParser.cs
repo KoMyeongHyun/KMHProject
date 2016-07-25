@@ -6,17 +6,8 @@ using System.Text;
 using System.IO;
 using System;
 
-public class ItemParser : MonoBehaviour
+public class ItemParser : Parser
 {
-    private bool loadingCompletion;
-    public bool LoadingCompletion
-    {
-        get
-        {
-            return loadingCompletion;
-        }
-    }
-
     //item 정보를 전부 읽은 다음 Record 정보를 읽기 위한 검사용
     private bool itemParserCompletion;
 
@@ -39,20 +30,6 @@ public class ItemParser : MonoBehaviour
         xmlName.AppendFormat("Record{0}.xml", _stage);
         path = GetPath(xmlName.ToString());
         StartCoroutine(ParseRecord(path));
-    }
-
-    //XML을 다음과 같이 읽어 올 수도 있다.
-    //TextAsset textXml = Resources.Load("파일경로", typeof(TextAsset)) as TextAsset;
-    string GetPath(string _xmlName)
-    {
-        StringBuilder path = new StringBuilder();
-#if (UNITY_EDITOR || UNITY_STANDALONE_WIN)
-        path.AppendFormat("file:///{0}/{1}", Application.streamingAssetsPath, _xmlName);
-#elif UNITY_ANDROID
-        path.AppendFormat("jar:file://{0}!/assets/{1}", Application.dataPath, _xmlName);
-#endif
-
-        return path.ToString();
     }
 
     XmlDocument LoadXML(WWW _www)

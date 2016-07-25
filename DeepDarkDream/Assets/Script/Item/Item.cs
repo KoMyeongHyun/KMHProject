@@ -22,14 +22,15 @@ public class Item
 
     public Item() { }
     //public Item(Sprite _icon, string _name, int _id, ItemType _type, string _targetName, string _funcName, float _effect)
-    public Item(int _id, string _name, ItemType _type)
+    public Item(int _id, string _name, ItemType _type, ItemUse _use)
     {
         //use에 대한 설정 해줄 것
         //itemIcon = Resources.Load<Sprite>("" + iconName);
         //icon = _icon;
-        name = _name;
         id = _id;
+        name = _name;
         type = _type;
+        use = _use;
         //targetName = _targetName;
         //funcName = _funcName;
         //effect = _effect;
@@ -37,11 +38,11 @@ public class Item
     public Item(Item _item)
     {
         //use에 대한 설정 해줄 것
+        id = _item.id;
+        name = _item.name;
+        type = _item.type;
         use = _item.use;
         icon = _item.icon;
-        name = _item.name;
-        id = _item.id;
-        type = _item.type;
         //targetName = _item.targetName;
         //funcName = _item.funcName;
         //effect = _item.effect;
@@ -49,7 +50,7 @@ public class Item
 
     public ItemUse USE
     {
-        set { use = value; }
+        //set { use = value; }
         get { return use; }
     }
     public Sprite ICON
@@ -88,8 +89,8 @@ public class Item
     //    get { return effect; }
     //}
 
-    public virtual void Use()
+    public virtual int Use()
     {
-        use.Use();
+        return use.Use();
     }
 }

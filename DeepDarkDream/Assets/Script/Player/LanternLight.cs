@@ -1,39 +1,62 @@
 ﻿using UnityEngine;
+using LitJson;
 using System.Collections;
 
 public class LanternLight : MonoBehaviour
 {
-
-    public const float MAX_ENERGY = 1000.0f;
-    public const float PENALRY_ENERGY = MAX_ENERGY * 0.2f;
-    public const float OIL_IMG_SIZE = 234.0f;
+    private float MAX_ENERGY;
+    private float PENALRY_ENERGY;
+    private float CONSUME_SPEED;
+    private float CONSUME_POWER_ON;
+    //{
+    //    get
+    //    {
+    //        JsonData root = SettingParser.Instance.SettingData;
+    //        JsonData data = root["player"]["lantern"];
+    //        return float.Parse(data["consumePowerOn"].ToString());
+    //    }
+    //}
+    private float PRIME_INTENSITY;
+    private float SUB_INTENSITY;
 
     private Light primeLight;
     private Light subLight;
 
     private float energy;
-    private float consumeSpeed;
-    private float consumePowerOn;
-
     public bool lightPower;
 
-    private Transform oilTrans;
-
     private Animator ani;
+    //private Transform oilTrans;
 
-    // Use this for initialization
+    //LanternLight()
+    //{
+        //JsonData root = SettingParser.Instance.SettingData;
+        //JsonData data = root["player"]["lantern"];
+    //}
+    
     void Start ()
     {
         primeLight = gameObject.GetComponent<Light>();
         subLight = transform.GetChild(0).GetComponent<Light>();
-        primeLight.intensity = 7.0f; //조절 가능하게 뺄 것
-        subLight.intensity = 7.15f;
-        energy = MAX_ENERGY;       //조절 가능하게 뺄 것
-        consumeSpeed = 2.0f;    //조절 가능하게 뺄 것
-        consumePowerOn = 100.0f;
+
+        JsonData root = SettingParser.Instance.SettingData;
+        JsonData data = root["player"]["lantern"];
+        MAX_ENERGY = float.Parse(data["maxEnergy"].ToString());
+        float percentage = float.Parse(data["penaltyLine(%)"].ToString()) * 0.01f;
+        PENALRY_ENERGY = MAX_ENERGY * percentage;
+        CONSUME_SPEED = float.Parse(data["consumeSpeed"].ToString());
+        CONSUME_POWER_ON = float.Parse(data["consumePowerOn"].ToString());
+        PRIME_INTENSITY = float.Parse(data["primeLightIntensity"].ToString());
+        SUB_INTENSITY = float.Parse(data["subLightIntensity"].ToString());
+
+        primeLight.intensity = PRIME_INTENSITY;
+        subLight.intensity = SUB_INTENSITY;
+
+        energy = MAX_ENERGY;
         lightPower = true;
-        oilTrans = GameObject.FindGameObjectWithTag("Oil").GetComponent<Transform>();
+
         ani = gameObject.GetComponent<Animator>();
+        //oilTrans = GameObject.FindGameObjectWithTag("Oil").GetComponent<Transform>();
         //ani.SetBool("penalty", false);
     }
 	
@@ -52,13 +75,13 @@ public class LanternLight : MonoBehaviour
             else
             {
                 ani.enabled = false;
-                primeLight.intensity = 7.0f;
+                primeLight.intensity = PRIME_INTENSITY;
                 primeLight.enabled = true;
-                subLight.intensity = 7.15f;
+                subLight.intensity = SUB_INTENSITY;
                 subLight.enabled = true;
             }
 
-            energy -= consumeSpeed*Time.deltaTime;
+            energy -= CONSUME_SPEED * Time.deltaTime;
             if (energy < 0.0f)
             {
                 energy = 0.0f;
@@ -87,24 +110,24 @@ public class LanternLight : MonoBehaviour
 
             if(lightPower == false)
             {
-                if(energy < consumePowerOn)
+                if(energy < CONSUME_POWER_ON)
                     return;
                 else
-                    energy -= consumePowerOn;
+                    energy -= CONSUME_POWER_ON;
             }
             
             lightPower = !( lightPower );
 
-            primeLight.intensity = (energy > 0) ? 7.0f : 0.0f;
-            subLight.intensity = (energy > 0) ? 7.15f : 0.0f;
+            primeLight.intensity = (energy > 0) ? PRIME_INTENSITY : 0.0f;
+            subLight.intensity = (energy > 0) ? SUB_INTENSITY : 0.0f;
             this.GetComponent<SphereCollider>().enabled = lightPower;
 
             if(lightPower == false)
             {
                 ani.enabled = false;
-                primeLight.intensity = 7.0f;
+                primeLight.intensity = PRIME_INTENSITY;
                 primeLight.enabled = true;
-                subLight.intensity = 7.15f;
+                subLight.intensity = SUB_INTENSITY;
                 subLight.enabled = true;
             }
         }
@@ -128,12 +151,12 @@ public class LanternLight : MonoBehaviour
             energy = MAX_ENERGY;
         }
 
-        DisplayOil();
+        //DisplayOil();
     }
 
-    private void DisplayOil()
-    {
-        float oilPos_x = OIL_IMG_SIZE - (energy * OIL_IMG_SIZE / MAX_ENERGY);
-        oilTrans.localPosition = new Vector3(oilPos_x, oilTrans.localPosition.y, oilTrans.localPosition.z);
-    }
+    //private void DisplayOil()
+    //{
+    //    float oilPos_x = OIL_IMG_SIZE - (energy * OIL_IMG_SIZE / MAX_ENERGY);
+    //    oilTrans.localPosition = new Vector3(oilPos_x, oilTrans.localPosition.y, oilTrans.localPosition.z);
+    //}
 }

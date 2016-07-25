@@ -10,7 +10,6 @@ public class NextLevel : MonoBehaviour
         {
             //화면 전환 코루틴 실행 후에 맵이 변하도록 할 것
             SaveData.Instance.LoadingStageLevel = 2;
-            SaveData.Instance.nextPosition = new Vector3(-125, 29, 9);
             SceneManager.LoadScene("Loading");
         }
     }

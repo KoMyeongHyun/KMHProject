@@ -1,8 +1,16 @@
 ﻿using UnityEngine;
+using LitJson;
 using System.Collections;
 
 public class SaveData
 {
+    SaveData()
+    {
+        stageInfo = new StageInfo[10];
+        stageInfo[1].loadedStage = 0;
+        stageInfo[2].loadedStage = 0;
+    }
+
     private static SaveData instance = null;
     public static SaveData Instance
     {
@@ -30,16 +38,38 @@ public class SaveData
         get { return firstLoad; }
     }
 
-    private int[] loadedStage = new int[10];
+    //임시 데이터
+    private StageInfo[] stageInfo;
     public void SetLoadedStage(int _stage)
     {
-        loadedStage[_stage] = 1;
+        stageInfo[_stage].loadedStage = 1;
     }
     public int GetLoadedStage(int _stage)
     {
-        return loadedStage[_stage];
+        return stageInfo[_stage].loadedStage;
     }
+    public Vector3 GetStartPos(int _stage)
+    {
+        return stageInfo[_stage].startPos;
+    }
+    public void InitStageInfo()
+    {
+        Vector3 startPos = new Vector3();
+        JsonData root = SettingParser.Instance.SettingData;
+        JsonData data = root["player"]["startPosition"];
+        for (int i = 1; i < data.Count; ++i)
+        {
+            startPos.x = float.Parse(data[i]["position"][0].ToString());
+            startPos.y = float.Parse(data[i]["position"][1].ToString());
+            startPos.z = float.Parse(data[i]["position"][2].ToString());
 
-    //임시 데이터
-    public Vector3 nextPosition;
+            stageInfo[i].startPos = startPos;
+        }
+    }
+    
+    struct StageInfo
+    {
+        public Vector3 startPos;
+        public int loadedStage;
+    }
 }

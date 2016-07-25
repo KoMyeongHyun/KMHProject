@@ -1,0 +1,35 @@
+{
+  "player": {
+    "startPosition": [
+      { },
+      {
+        "stage": 1,
+        "position": [ -0.5, 2.0, 40.0 ]
+      },
+      {
+        "stage": 2,
+        "position": [ -125.0, 29.0, 9.0 ]
+      }
+    ],
+    "stamina": {
+      "maxStamina": 1000.0,
+      "penaltyLine(%)": 20.0,
+      "consumeSpeedOfRun": 100.0,
+      "consumeSpeedOfSlowWalk": 30.0,
+      "recoverySpeedOfWalk": 10.0,
+      "recoverySpeedOfStop": 30.0
+    },
+    "mentality": {
+      "maxMentality": 1000.0,
+      "penaltyLine(%)": 20.0
+    },
+    "lantern": {
+      "maxEnergy": 1000.0,
+      "penaltyLine(%)": 20.0,
+      "consumeSpeed": 2.0,
+      "consumePowerOn": 100.0,
+      "primeLightIntensity": 7.0,
+      "subLightIntensity": 7.15
+    }
+  }
+}

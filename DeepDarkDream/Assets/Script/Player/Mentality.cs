@@ -1,17 +1,24 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using LitJson;
 using System.Collections;
 
 public class Mentality
 {
-    public const float MAX_MENTALITY = 1000.0f;
-    public const float PENALTY_MENTALITY = MAX_MENTALITY * 0.2f;
+    public readonly float MAX_MENTALITY;
+    private readonly float PENALTY_MENTALITY;
 
     private float currentMentality;
     public float CurrentMentality { get { return currentMentality; } }
 
     public Mentality()
     {
+        JsonData root = SettingParser.Instance.SettingData;
+        JsonData data = root["player"]["mentality"];
+        MAX_MENTALITY = float.Parse(data["maxMentality"].ToString());
+        float percentage = float.Parse(data["penaltyLine(%)"].ToString()) * 0.01f;
+        PENALTY_MENTALITY = MAX_MENTALITY * percentage;
+
         currentMentality = MAX_MENTALITY;
     }
 

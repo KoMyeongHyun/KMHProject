@@ -32,9 +32,10 @@ class ConsumptionItem : ItemUse
         get { return effect; }
     }
 
-    public void Use()
+    public int Use()
     {
         //GameObject.FindGameObjectWithTag(_item.TARGET_NAME).SendMessage(_item.FUNC_NAME, _item.EFFECT);
         GameObject.FindGameObjectWithTag(targetName).SendMessage(funcName, effect);
+        return -1;
     }
 }
