@@ -81,7 +81,7 @@ public class DataLoad : MonoBehaviour
 
         SaveData.Instance.InitStageInfo();
         SaveData.Instance.SetLoadedStage(level);
-        //타이틀로 돌아가지 않는 이상 UI, character 가져간다.
+
         //타이틀로 이동 시 전부 삭제
         //스테이지 이동 시 플레이어 좌표 변경
         GameObject obj = GameObject.FindGameObjectWithTag("Player");
@@ -89,5 +89,6 @@ public class DataLoad : MonoBehaviour
         {
             obj.transform.position = SaveData.Instance.GetStartPos(level);
         }
+        //다음 맵으로 넘어갈 때 Lantern TriggerStay가 작동안하는 현상 수정할 것
     }
 }

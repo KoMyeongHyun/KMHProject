@@ -12,6 +12,7 @@ public class DroppedItem : MonoBehaviour
         get { return itemID; }
     }
 
+    private ItemOutline outline;
     private InputManager inputManager;
     private Transform cameraTrans;
     private UnityStandardAssets.Characters.FirstPerson.FirstPersonController fpc;
@@ -19,6 +20,8 @@ public class DroppedItem : MonoBehaviour
 
     public void Start()
     {
+        outline = transform.GetChild(1).GetComponent<ItemOutline>();
+
         inputManager = GameObject.FindGameObjectWithTag("Canvas").GetComponent<InputManager>();
         cameraTrans = GameObject.FindGameObjectWithTag("MainCamera").transform;
 
@@ -33,6 +36,14 @@ public class DroppedItem : MonoBehaviour
         {
             //아이템을 하나하나 먹을 수 있도록 마우스를 때면 초기화
             inProgress = false;
+        }
+    }
+
+    public void OnTriggerEnter(Collider col)
+    {
+        if (col.tag == "Player")
+        {
+            outline.SetOutline(0.008f);
         }
     }
 
@@ -83,6 +94,11 @@ public class DroppedItem : MonoBehaviour
     {
         //커서 없애기
         inputManager.HideCursor();
+
+        if (col.tag == "Player")
+        {
+            outline.SetOutline(0);
+        }
     }
 
     private bool Cast(Collider col)

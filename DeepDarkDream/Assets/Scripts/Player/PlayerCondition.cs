@@ -88,7 +88,7 @@ public class PlayerCondition : MonoBehaviour
             }
         }
 
-        //DisplayCondition();
+        DisplayCondition();
 	}
 
     private void DisplayCondition()

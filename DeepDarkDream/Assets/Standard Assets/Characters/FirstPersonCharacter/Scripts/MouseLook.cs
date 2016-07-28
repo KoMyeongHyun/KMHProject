@@ -55,9 +55,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
             if (processDecayTime < decayTime)
             {
                 processDecayTime += Time.deltaTime;
-                y = (Mathf.Sin(2.0f * 3.14159f * processDecayTime * 3) * 10.0f +
-                     Mathf.Sin(2.0f * 3.14159f * processDecayTime * 7 + 0.2f) * 5.1f +
-                     Mathf.Sin(2.0f * 3.14159f * processDecayTime * 15 + 0.5f) * 1.1f) * (decayTime - processDecayTime) / decayTime;
+                y = (Mathf.Sin(2.0f * 3.14159f * processDecayTime * 3) * 6.0f +
+                     Mathf.Sin(2.0f * 3.14159f * processDecayTime * 6 + 0.2f) * 3.1f +
+                     Mathf.Sin(2.0f * 3.14159f * processDecayTime * 10 + 0.5f) * 1.1f) * (decayTime - processDecayTime) / decayTime;
             }
             xRot += y;
             //}
