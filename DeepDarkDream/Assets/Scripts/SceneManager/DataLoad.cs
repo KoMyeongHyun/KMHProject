@@ -5,7 +5,7 @@ using System.Collections;
 
 public class DataLoad : MonoBehaviour
 {
-    const int SCREEN_WIDTH = 1280;
+    //const int SCREEN_WIDTH = 1280;
 
     [SerializeField]
     private GameObject staticDataLoad;
@@ -37,7 +37,7 @@ public class DataLoad : MonoBehaviour
         {
             loadingPercentage = (int)(asyncLoad.progress * 100);
             percentage.text = loadingPercentage + "%";
-            gaugeSize = (int)(SCREEN_WIDTH * loadingPercentage * 0.01);
+            gaugeSize = (int)((int)STANDARD_SIZE.WIDTH * loadingPercentage * 0.01);
             progressBar.sizeDelta = new Vector2(gaugeSize, progressBar.sizeDelta.y);
 
             yield return null;
@@ -48,7 +48,7 @@ public class DataLoad : MonoBehaviour
 
         loadingPercentage = 100;
         percentage.text = loadingPercentage + "%";
-        gaugeSize = SCREEN_WIDTH;
+        gaugeSize = (int)STANDARD_SIZE.WIDTH;
         progressBar.sizeDelta = new Vector2(gaugeSize, progressBar.sizeDelta.y);
         asyncLoad.allowSceneActivation = true;
     }
@@ -59,6 +59,10 @@ public class DataLoad : MonoBehaviour
         if (SaveData.Instance.FirstLoad)
         {
             Instantiate(staticDataLoad);
+            while(SettingParser.Instance.LoadingCompletion == false)
+            {
+                yield return null;
+            }
             SaveData.Instance.FirstLoad = false;
         }
 
@@ -74,10 +78,10 @@ public class DataLoad : MonoBehaviour
         {
             yield return null;
         }
-        while(SettingParser.Instance.LoadingCompletion == false)
-        {
-            yield return null;
-        }
+        //while(SettingParser.Instance.LoadingCompletion == false)
+        //{
+        //    yield return null;
+        //}
 
         SaveData.Instance.InitStageInfo();
         SaveData.Instance.SetLoadedStage(level);

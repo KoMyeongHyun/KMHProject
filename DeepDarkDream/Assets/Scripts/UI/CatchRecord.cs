@@ -5,11 +5,9 @@ using System.Text.RegularExpressions;
 
 public class CatchRecord : MonoBehaviour
 {
-    //private bool activity;
     private string[] divisionContent;
     private int curPage;
     private Text curContent;
-    private bool startContent;
 
     public void SetRecord(Item _item)
     {
@@ -22,60 +20,44 @@ public class CatchRecord : MonoBehaviour
         curPage = 0;
         curContent.text = divisionContent[curPage];
 
-        startContent = false;
         StartCoroutine(StartContent());
     }
-
-    //시작 후에 일단 마우스가 한 번 때어질 때까지 동작 못하도록 설정
+    
     private IEnumerator StartContent()
     {
         while(Input.GetMouseButtonUp(0) == false)
         {
             yield return null;
         }
-        startContent = true;
-    }
 
-    void Update()
-    {
-        if(startContent == false)
+        while(true)
         {
-            return;
-        }
+            yield return null;
 
-        if (Input.GetMouseButtonUp(0))
-        {
-            ++curPage;
-            if(curPage >= divisionContent.Length)
+            if (Input.GetMouseButtonUp(0))
             {
-                gameObject.SetActive(false);
-                return;
+                ++curPage;
+                if (curPage >= divisionContent.Length)
+                {
+                    break;
+                }
+                curContent.text = divisionContent[curPage];
             }
-            curContent.text = divisionContent[curPage];
-        }
-        else if(Input.GetMouseButtonUp(1))
-        {
-            --curPage;
-            if (curPage < 0)
+            else if (Input.GetMouseButtonUp(1))
             {
-                curPage = 0;
-                return;
+                --curPage;
+                if (curPage < 0)
+                {
+                    curPage = 0;
+                }
+                curContent.text = divisionContent[curPage];
             }
-            curContent.text = divisionContent[curPage];
+            else if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                break;
+            }
         }
-        else if(Input.GetKeyDown(KeyCode.Escape))
-        {
-            gameObject.SetActive(false);
-            return;
-        }
+        
+        gameObject.SetActive(false);
     }
-
-
-    //if (activity == true)
-    //{
-    //    gameObject.SetActive(false);
-    //    activity = false;
-    //    return;
-    //}
-    //activity = true;
 }

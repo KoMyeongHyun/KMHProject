@@ -7,8 +7,10 @@ public class SaveData
     SaveData()
     {
         stageInfo = new StageInfo[10];
-        stageInfo[1].loadedStage = 0;
-        stageInfo[2].loadedStage = 0;
+        for(int i = 0; i < stageInfo.Length; ++i)
+        {
+            stageInfo[i].loadedStage = 0;
+        }
     }
 
     private static SaveData instance = null;

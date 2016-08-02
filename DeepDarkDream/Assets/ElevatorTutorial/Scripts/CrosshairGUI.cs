@@ -24,7 +24,7 @@ public class CrosshairGUI : MonoBehaviour
     private Ray playerAim;
     private Camera playerCam;
     private InputManager inputManager;
-    private Inventory inven;
+    //private Inventory inven;
 
     void Awake()
     {
@@ -45,7 +45,7 @@ public class CrosshairGUI : MonoBehaviour
         }
 
         inputManager = GameObject.FindGameObjectWithTag("Canvas").GetComponent<InputManager>();
-        inven = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>();
+        //inven = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>();
     }
 
     void Update()
@@ -66,7 +66,7 @@ public class CrosshairGUI : MonoBehaviour
         }
 
         //아이템창이나 catch창 켜져 있으면 둘다 false
-        if (inputManager.OpenInven || inven.catchInfo.activeSelf || inven.CatchRecord.isActiveAndEnabled)
+        if (inputManager.OpenInven || inputManager.ActiveCatchInfo || inputManager.ActiveCatchRecord)
         {
             m_DefaultReticle = false;
             m_UseReticle = false;
@@ -79,8 +79,8 @@ public class CrosshairGUI : MonoBehaviour
 
         if (m_ShowCursor)
         {
-            //			Cursor.visible = (true);
-            //			Cursor.lockState = CursorLockMode.None;
+            //Cursor.visible = (true);
+            //Cursor.lockState = CursorLockMode.None;
         }
         else
         {

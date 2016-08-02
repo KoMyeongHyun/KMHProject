@@ -20,7 +20,8 @@ class Record : Item
 
     public override int Use()
     {
-        GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>().ShowCatchBook(this as Item);
+        GameObject.FindGameObjectWithTag("Canvas").GetComponent<InputManager>()
+            .ShowCatchItem(this as Item);
         return 0;
     }
 }

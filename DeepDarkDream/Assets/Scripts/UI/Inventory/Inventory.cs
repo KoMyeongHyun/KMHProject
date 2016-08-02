@@ -6,23 +6,16 @@ using System.Collections.Generic;
 
 public class Inventory : MonoBehaviour
 {
-    public Dictionary<int, GameObject> itemSlots = new Dictionary<int, GameObject>();
+    private Dictionary<int, GameObject> itemSlots = new Dictionary<int, GameObject>();
     public Dictionary<int, Item> items = new Dictionary<int, Item>();
+
     public GameObject slots;
     public int x, y, interval;
 
-    public GameObject tooltip;
-    public GameObject catchInfo;
-    //public GameObject catchBook;
     [SerializeField]
-    private CatchRecord catchRecord;
-    public CatchRecord CatchRecord { get { return catchRecord; } }
+    private GameObject tooltip;
 
-    //private Image sourceImg;
-    //public Image bookImg;
-    //public bool catchInfoLock;
-
-    void Start()
+    void Awake()
     {
         int slotAmount = 0;
         int initX = x;
@@ -46,11 +39,6 @@ public class Inventory : MonoBehaviour
             x = initX;
             y -= interval;
         }
-
-        //hide inven
-        transform.position = new Vector3(5000.0f, 5000.0f);
-
-        //sourceImg = catchInfo.GetComponent<Image>();
     }
 
     void OnDestory()
@@ -77,21 +65,10 @@ public class Inventory : MonoBehaviour
         {
             if(items[i].NAME == null)
             {
-                //DB에서 가져오는 방법?
-                //items[i] = Instantiate(GameObject.FindGameObjectWithTag("Empty")).GetComponent<Item>() ;
-
                 items[i] = _item;
-                
-                //만약 책이라면 추가함수 실행
-                if (_item.TYPE == ItemType.RECORD)
-                {
-                    ShowCatchBook(items[i]);
-                }
-                else
-                {
-                    ShowCatchInfo(items[i]);
-                }
                 itemSlots[i].GetComponent<Slot>().AddItem();
+                GameObject.FindGameObjectWithTag("Canvas").SendMessage("ShowCatchItem", items[i]);
+
                 break;
             }
         }
@@ -110,37 +87,17 @@ public class Inventory : MonoBehaviour
         return false;
     }
 	
-    //인벤토리와 분리할 것
     public void ShowTooltip(Vector3 toolPosition, Item item)
     {
         tooltip.SetActive(true);
-        tooltip.transform.position = toolPosition + new Vector3(Screen.width*0.1f,-Screen.height*0.1f,0.0f);
+
+        tooltip.transform.position = toolPosition
+            + new Vector3(Screen.width * 0.04f, 0.0f, 0.0f);
         tooltip.transform.GetChild(0).GetComponent<Text>().text = item.NAME;
     }
+
     public void CloseTooltip()
     {
         tooltip.SetActive(false);
-    }
-
-    public void ShowCatchInfo(Item item)
-    {
-        catchInfo.SetActive(true);
-        catchInfo.transform.localPosition = Vector3.zero;
-        RectTransform catchRect = catchInfo.GetComponent<RectTransform>();
-        catchRect.sizeDelta = new Vector2(400, 400);
-        catchInfo.transform.GetChild(0).GetComponent<Text>().text = item.NAME;
-        catchInfo.transform.GetChild(1).GetComponent<Text>().text = "State";
-        catchInfo.transform.GetChild(2).GetComponent<Text>().text = "Desc";
-        //inprogress true로 만들면
-    }
-    //public void CloseCatchInfo()
-    //{
-    //    catchInfo.SetActive(false);
-    //    catchBook.SetActive(false);
-    //}
-    public void ShowCatchBook(Item _item)
-    {
-        catchRecord.gameObject.SetActive(true);
-        catchRecord.SetRecord(_item);
     }
 }

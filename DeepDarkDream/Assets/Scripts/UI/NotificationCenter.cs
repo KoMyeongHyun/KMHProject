@@ -72,6 +72,11 @@ public class NotificationCenter : MonoBehaviour
         }
     }
 
+    public void RemoveAllObserver()
+    {
+        notifications.Clear();
+    }
+
     // PostNotification sends a notification object to all objects that have requested to receive this type of notification.
     // A notification can either be posted with a notification object or by just sending the individual components.
 

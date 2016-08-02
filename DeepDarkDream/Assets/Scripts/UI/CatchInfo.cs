@@ -1,28 +1,32 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
-//using UnityEngine.EventSystems;
 
 public class CatchInfo : MonoBehaviour
 {
-    private bool activity;
-	// Use this for initialization
-	void Start ()
+    public void SetInfo(Item _item)
     {
-        activity = false;
-	}
+        transform.GetChild(0).GetComponent<Text>().text = _item.NAME;
+        transform.GetChild(1).GetComponent<Text>().text = "State";
+        transform.GetChild(2).GetComponent<Text>().text = "Desc";
+
+        StartCoroutine(CheckClick());
+    }
 	
-	// Update is called once per frame
-	void Update ()
+	IEnumerator CheckClick ()
     {
-        if(Input.GetMouseButtonUp(0))
+        while(Input.GetMouseButtonUp(0) == false)
         {
-            if(activity == true)
-            {
-                gameObject.SetActive(false);
-                activity = false;
-                return;
-            }
-            activity = true;
+            yield return null;
         }
-	}
+
+        yield return null;
+
+        while (Input.GetMouseButtonUp(0) == false)
+        {
+            yield return null;
+        }
+
+        gameObject.SetActive(false);
+    }
 }

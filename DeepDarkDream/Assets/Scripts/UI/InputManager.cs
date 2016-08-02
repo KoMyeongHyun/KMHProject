@@ -2,12 +2,35 @@
 using UnityEngine.SceneManagement;
 using System.Collections;
 
-public class InputManager : MonoBehaviour {
+public class InputManager : MonoBehaviour
+{
+    [SerializeField]
+    Texture2D defaultCursor;
+    [SerializeField]
+    Vector2 DefaultHotSpot;
+    [SerializeField]
+    Texture2D handCursor;
+    [SerializeField]
+    Vector2 handHotSpot;
 
-    [SerializeField] Texture2D defaultCursor;
-    [SerializeField] Vector2 DefaultHotSpot;
-    [SerializeField] Texture2D handCursor;
-    [SerializeField] Vector2 handHotSpot;
+    [SerializeField]
+    private GameObject catchInfo;
+    public bool ActiveCatchInfo
+    {
+        get
+        {
+            return catchInfo.activeSelf;
+        }
+    }
+    [SerializeField]
+    private GameObject catchRecord;
+    public bool ActiveCatchRecord
+    {
+        get
+        {
+            return catchRecord.activeSelf;
+        }
+    }
 
     private GameObject inven;
     private UnityStandardAssets.Characters.FirstPerson.FirstPersonController player;
@@ -16,8 +39,8 @@ public class InputManager : MonoBehaviour {
     private bool openInven;
     public bool OpenInven { get { return openInven; } }
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start()
     {
         ShowCursor();
         Cursor.lockState = CursorLockMode.Locked;
@@ -25,20 +48,21 @@ public class InputManager : MonoBehaviour {
 
         inven = GameObject.FindGameObjectWithTag("Inventory");
         player = GameObject.FindGameObjectWithTag("Player")
-            .GetComponent< UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
-        invenPos = new Vector3(Screen.width * 0.8f, Screen.height * 0, 5f);
+            .GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
+
+        invenPos = new Vector3(Screen.width * 0.65f
+                , Screen.height * 0.5f);
         hideInvenPos = new Vector3(5000.0f, 5000.0f);
         inven.transform.position = hideInvenPos;
         openInven = false;
-        //inven.SetActive(openInven);
-
+        
         DontDestroyOnLoad(this);
     }
-	
-	void Update ()
+
+    void Update()
     {
         //추후 수정할 것
-        if(Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
             ShowCursor();
             SaveData.Instance.LoadingStageLevel = 0;
@@ -55,23 +79,22 @@ public class InputManager : MonoBehaviour {
             obj = new GameObject("AudioListener");
             obj.AddComponent<AudioListener>();
             obj.AddComponent<Camera>().transform.position = existingPos;
+            NotificationCenter.DefaultCenter.RemoveAllObserver();
 
             SceneManager.LoadScene("Title");
         }
 
-        if (inven.GetComponent<Inventory>().catchInfo.activeSelf == true
-             || inven.GetComponent<Inventory>().CatchRecord.isActiveAndEnabled == true)
+        if (catchInfo.activeSelf || catchRecord.activeSelf)
         {
             return;
         }
-        
+
         if (Input.GetKeyDown(KeyCode.I))
         {
-            invenPos = new Vector3(Screen.width * 0.75f, Screen.height * 0.5f);
             Debug.Log(inven.transform.position);
             openInven = !openInven;
 
-            if(openInven)
+            if (openInven)
             {
                 ShowCursor();
 
@@ -86,7 +109,7 @@ public class InputManager : MonoBehaviour {
                 player.setStopBehavior(false);
             }
         }
-       
+
     }
 
     private void ShowCursor()
@@ -105,8 +128,8 @@ public class InputManager : MonoBehaviour {
         //{
         //    return;
         //}
-        
-//        Cursor.visible = true;
+
+        //        Cursor.visible = true;
     }
     public void HideCursor()
     {
@@ -114,7 +137,32 @@ public class InputManager : MonoBehaviour {
         //{
         //    return;
         //}
-        
-//        Cursor.visible = false;
+
+        //        Cursor.visible = false;
+    }
+
+    public void ShowCatchItem(Item _item)
+    {
+        switch(_item.TYPE)
+        {
+            case ItemType.RECORD:
+                ShowCatchRecord(_item);
+                break;
+            default:
+                ShowCatchInfo(_item);
+                break;
+        }
+    }
+
+    private void ShowCatchInfo(Item _item)
+    {
+        catchInfo.SetActive(true);
+        catchInfo.GetComponent<CatchInfo>().SetInfo(_item);
+    }
+
+    private void ShowCatchRecord(Item _item)
+    {
+        catchRecord.gameObject.SetActive(true);
+        catchRecord.GetComponent<CatchRecord>().SetRecord(_item);
     }
 }

@@ -9,6 +9,10 @@ public class Title2 : MonoBehaviour
     [SerializeField]
     private GameObject info;
 
+    void Awake()
+    {
+    }
+
     public void ClickStart()
     {
         SaveData.Instance.LoadingStageLevel = 1;

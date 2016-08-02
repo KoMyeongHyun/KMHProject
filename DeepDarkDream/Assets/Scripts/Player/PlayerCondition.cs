@@ -151,7 +151,8 @@ public class PlayerCondition : MonoBehaviour
         GameObject bs = Instantiate(beShot);
         bs.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").GetComponent<Transform>());
         bs.GetComponent<RectTransform>().localPosition = new Vector3(0.0f, 0.0f, 0.0f);
-        bs.GetComponent<RectTransform>().localScale = new Vector3(1.0f, 1.0f, 1.0f);
+        Vector2 ratio = bs.transform.parent.GetComponent<CanvasSizeControl>().Ratio;
+        bs.GetComponent<RectTransform>().localScale = ratio;
 
         //화면 흔들어 주기
         gameObject.SendMessage("OnBeShotWave");

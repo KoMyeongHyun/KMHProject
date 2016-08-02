@@ -49,45 +49,48 @@ public class DroppedItem : MonoBehaviour
 
     public void OnTriggerStay(Collider col)
     {
-        if (col.tag == "Player")
+        if (col.tag != "Player")
         {
-            //툴팁이 켜져있거나 아이템창을 열고 있는 상황
-            bool catchInfo = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>().catchInfo.activeSelf;
-            bool catchRecord = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>().CatchRecord.isActiveAndEnabled;
-            if (catchInfo || catchRecord || fpc.StopBehavior)
-            {
-                //inputManager.HideCursor();
-                return;
-            }
+            return;
+        }
 
-            if (Cast(col))
-            {
-                inputManager.ChangeCursor();
+        //툴팁이 켜져있거나 아이템창을 열고 있는 상황
+        //플레이어 상태 설정으로 해결할 것
+        bool catchInfo = inputManager.ActiveCatchInfo;
+        bool catchRecord = inputManager.ActiveCatchRecord;
+        if (catchInfo || catchRecord || fpc.StopBehavior)
+        {
+            //inputManager.HideCursor();
+            return;
+        }
 
-                if (Input.GetMouseButtonDown(0) && inProgress == false)
+        if (Cast(col))
+        {
+            inputManager.ChangeCursor();
+
+            if (Input.GetMouseButtonDown(0) && inProgress == false)
+            {
+                Item item = ItemContainer.Instance.GetItem(itemID);
+                if (item == null)
                 {
-                    Item item = ItemContainer.Instance.GetItem(itemID);
-                    if(item == null)
-                    {
-                        return;
-                    }
-                    item.ICON = itemIcon;
-
-                    //아이템 습득
-                    inProgress = true;
-                    Debug.Log("item get");
-                    //아이템 정보 넘겨주기
-                    GameObject.FindGameObjectWithTag("Inventory").SendMessage("AddItem", item);
-                    inputManager.HideCursor();
-                    Destroy(gameObject);
+                    return;
                 }
-            }
-            else
-            {
-                //하나라도 트루면 지우지 말 것
+                item.ICON = itemIcon;
+
+                //아이템 습득
+                inProgress = true;
+                Debug.Log("item get");
+                //아이템 정보 넘겨주기
+                GameObject.FindGameObjectWithTag("Inventory").SendMessage("AddItem", item);
                 inputManager.HideCursor();
+                Destroy(gameObject);
             }
-        }   
+        }
+        else
+        {
+            //하나라도 트루면 지우지 말 것
+            inputManager.HideCursor();
+        }
     }
 
     public void OnTriggerExit(Collider col)
