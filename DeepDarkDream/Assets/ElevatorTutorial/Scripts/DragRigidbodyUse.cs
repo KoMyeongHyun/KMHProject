@@ -3,37 +3,19 @@ DragRigidbodyUse.cs ver. 11.1.16 - wirted by ThunderWire Games * Script for Drag
 */
 
 using UnityEngine;
+using UnityStandardAssets.CrossPlatformInput;
 using System.Collections;
 using System.Collections.Generic;
 
 [System.Serializable]
 public class GrabObjectClass
-    {
-		public bool m_FreezeRotation;
-		public float m_PickupRange = 3f; 
-		public float m_ThrowStrength = 50f;
-		public float m_distance = 3f;
-		public float m_maxDistanceGrab = 4f;
-	}
-	
-[System.Serializable]
-public class ItemGrabClass
-    {
-		public bool m_FreezeRotation;		
-		public float m_ItemPickupRange = 2f;
-		public float m_ItemThrow = 45f;
-		public float m_ItemDistance = 1f;
-		public float m_ItemMaxGrab = 2.5f;
-	}	
-	
-[System.Serializable]
-public class DoorGrabClass
-    {	
-		public float m_DoorPickupRange = 2f;
-		public float m_DoorThrow = 10f;
-		public float m_DoorDistance = 2f;
-		public float m_DoorMaxGrab = 3f;
-	}
+{
+    public bool m_FreezeRotation;
+    public float m_PickupRange = 3f;
+    public float m_ThrowStrength = 50f;
+    public float m_distance = 1f;
+    public float m_maxDistanceGrab = 4f;
+}
 
 [System.Serializable]
 public class TagsClass
@@ -46,15 +28,12 @@ public class TagsClass
 
 public class DragRigidbodyUse : MonoBehaviour
 {
-	
 	public GameObject playerCam;
 	
 	public string GrabButton = "Grab";
 	public string ThrowButton = "Throw";
 	public string UseButton = "Use";
 	public GrabObjectClass ObjectGrab = new GrabObjectClass();
-	public ItemGrabClass ItemGrab = new ItemGrabClass();
-	public DoorGrabClass DoorGrab = new DoorGrabClass();
 	public TagsClass Tags = new TagsClass();
 	
 	private float PickupRange = 3f;
@@ -65,55 +44,39 @@ public class DragRigidbodyUse : MonoBehaviour
 	private Ray playerAim;
 	private GameObject objectHeld;
 	private bool isObjectHeld;
-	private bool tryPickupObject;
+    private bool saveFreezeState;
 	
 	void Start ()
     {
-		isObjectHeld = false;
-		tryPickupObject = false;
-		objectHeld = null;
-	}
+        objectHeld = null;
+        isObjectHeld = false;
+        saveFreezeState = false;
+    }
 	
     void Update()
     {
-        if (Input.GetButtonDown("Fire1"))
+        //스테이지 넘어가면 잡고 있는 오브젝트 놓기
+        //타격 받으면 오브젝트 놓기?
+        if (Input.GetButtonDown(GrabButton))
         {
-            TryDoorAction();
+            if (isObjectHeld == false)
+            {
+                //오브젝트 집기 시도
+                tryPickObject();
+            }
+            else
+            {
+                DropObject();
+            }
         }
     }
 
 	void FixedUpdate ()
     {
-        if (Input.GetButton(GrabButton))
+        if(isObjectHeld)
         {
-			if(!isObjectHeld)
-            {
-				tryPickObject();
-				tryPickupObject = true;
-			} else
-            {
-				holdObject();
-			}
-		}
-        else if(isObjectHeld)
-        {
-			DropObject();
-		}
-		
-		if(Input.GetButton(ThrowButton) && isObjectHeld)
-        {
-			isObjectHeld = false;
-			objectHeld.GetComponent<Rigidbody>().useGravity = true;
-			ThrowObject();
-		}
-		
-		if(Input.GetButton(UseButton))
-        {
-			isObjectHeld = false;
-			tryPickObject();
-			tryPickupObject = false;
-			Use();
-		}
+            holdObject();
+        }
 	}
 
     private void TryDoorAction()
@@ -142,63 +105,62 @@ public class DragRigidbodyUse : MonoBehaviour
 		if (Physics.Raycast (playerAim, out hit, PickupRange))
         {
 			objectHeld = hit.collider.gameObject;
-			if(hit.collider.tag == Tags.m_InteractTag && tryPickupObject)
+			if(hit.collider.tag == Tags.m_InteractTag)
             {
-				isObjectHeld = true;
-				objectHeld.GetComponent<Rigidbody>().useGravity = false;
-				if(ObjectGrab.m_FreezeRotation)
+                Rigidbody rig;
+                if(objectHeld.GetComponent<Rigidbody>() == null)
                 {
-					objectHeld.GetComponent<Rigidbody>().freezeRotation = true;
+                    //부모에 Rigidbody가 붙어있을 경우
+                    rig = objectHeld.GetComponentInParent<Rigidbody>();
+                    objectHeld = objectHeld.transform.parent.gameObject;
+                }
+                else
+                {
+                    rig = objectHeld.GetComponent<Rigidbody>();
+                }
+
+                isObjectHeld = true;
+                rig.useGravity = false;
+                saveFreezeState = rig.freezeRotation;
+                if (ObjectGrab.m_FreezeRotation)
+                {
+                    rig.freezeRotation = true;
 				}
-				if(ObjectGrab.m_FreezeRotation == false)
+				if (ObjectGrab.m_FreezeRotation == false)
                 {
-					objectHeld.GetComponent<Rigidbody>().freezeRotation = false;
+                    rig.freezeRotation = false;
 				}
 				/**/
 				PickupRange = ObjectGrab.m_PickupRange; 
 				ThrowStrength = ObjectGrab.m_ThrowStrength;
 				distance = ObjectGrab.m_distance;
 				maxDistanceGrab = ObjectGrab.m_maxDistanceGrab;
-			}
-			//if(hit.collider.tag == Tags.m_InteractItemsTag && tryPickupObject){
-			//	isObjectHeld = true;
-			//	objectHeld.GetComponent<Rigidbody>().useGravity = true;
-			//	if(ItemGrab.m_FreezeRotation)
-            //  {
-            //      objectHeld.GetComponent<Rigidbody>().freezeRotation = true;
-			//	}
-			//	if(ItemGrab.m_FreezeRotation == false)
-            //  {
-            //      objectHeld.GetComponent<Rigidbody>().freezeRotation = false;
-			//	}
-			//	/**/
-			//	PickupRange = ItemGrab.m_ItemPickupRange; 
-			//	ThrowStrength = ItemGrab.m_ItemThrow;
-			//	distance = ItemGrab.m_ItemDistance;
-			//	maxDistanceGrab = ItemGrab.m_ItemMaxGrab;
-			//}
-			//if(hit.collider.tag == Tags.m_DoorsTag && tryPickupObject){
-			//	isObjectHeld = true;
-			//	objectHeld.GetComponent<Rigidbody>().useGravity = true;
-			//	objectHeld.GetComponent<Rigidbody>().freezeRotation = false;
-			//	/**/
-			//	PickupRange = DoorGrab.m_DoorPickupRange; 
-			//	ThrowStrength = DoorGrab.m_DoorThrow;
-			//	distance = DoorGrab.m_DoorDistance;
-			//	maxDistanceGrab = DoorGrab.m_DoorMaxGrab;
-			//}
+                return;
+            }
 		}
-	}
+        TryDoorAction();
+    }
 	
 	private void holdObject()
     {
+        //케릭터 회전에 따른 오브젝트 회전 처리할 것
         Ray playerAim = playerCam.GetComponent<Camera>().ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        //Transform player = GameObject.FindGameObjectWithTag("Player").transform;
+        //Vector3 nextPos = player.position + new Vector3(0, 0.5f, 0) + player.forward * distance;
+
+        Vector3 nextPos = playerCam.transform.position + playerAim.direction * distance;
+        Vector3 currPos = objectHeld.transform.position;
 		
-		Vector3 nextPos = playerCam.transform.position + playerAim.direction * distance;
-		Vector3 currPos = objectHeld.transform.position;
-		
-		objectHeld.GetComponent<Rigidbody>().velocity = (nextPos - currPos) * 10;
-		
+		objectHeld.GetComponent<Rigidbody>().velocity = (nextPos - currPos) * 20;
+
+        //그대로 들어올린 후 플레이어가 회전하면 같이 회전
+        //float yRot = CrossPlatformInputManager.GetAxis("Mouse X")*2.0f;
+        //float xRot = CrossPlatformInputManager.GetAxis("Mouse Y");
+        //Quaternion e = Quaternion.Euler(-xRot, yRot, 0.0f);
+        //objectHeld.transform.Rotate(playerCam.transform.up, yRot);
+
+        objectHeld.transform.forward = playerCam.transform.forward;
+
         if (Vector3.Distance(objectHeld.transform.position, playerCam.transform.position) > maxDistanceGrab)
         {
             DropObject();
@@ -208,9 +170,8 @@ public class DragRigidbodyUse : MonoBehaviour
     private void DropObject()
     {
 		isObjectHeld = false;
-		tryPickupObject = false;
 		objectHeld.GetComponent<Rigidbody>().useGravity = true;
-        //objectHeld.GetComponent<Rigidbody>().freezeRotation = false;
+        objectHeld.GetComponent<Rigidbody>().freezeRotation = saveFreezeState;
         objectHeld = null;
     }
 	
@@ -223,7 +184,8 @@ public class DragRigidbodyUse : MonoBehaviour
 	
     private void Use()
     {
-		objectHeld.SendMessage ("UseObject",SendMessageOptions.DontRequireReceiver); //Every script attached to the PickupObject that has a UseObject function will be called.
+        //Every script attached to the PickupObject that has a UseObject function will be called.
+        objectHeld.SendMessage ("UseObject",SendMessageOptions.DontRequireReceiver); 
 		objectHeld = null;
     }
 }

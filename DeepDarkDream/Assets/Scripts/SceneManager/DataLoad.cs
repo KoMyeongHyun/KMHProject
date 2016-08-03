@@ -44,8 +44,17 @@ public class DataLoad : MonoBehaviour
         }
 
         //각종 자원 로딩
-        StartCoroutine(LoadResource());
+        yield return StartCoroutine(LoadResource());
 
+        //스테이지 이동 시 플레이어 좌표 변경
+        int level = SaveData.Instance.LoadingStageLevel;
+        GameObject obj = GameObject.FindGameObjectWithTag("Player");
+        if (obj != null)
+        {
+            obj.transform.position = SaveData.Instance.GetStartPos(level);
+        }
+
+        //자원 로딩 완료 시
         loadingPercentage = 100;
         percentage.text = loadingPercentage + "%";
         gaugeSize = (int)STANDARD_SIZE.WIDTH;
@@ -63,6 +72,8 @@ public class DataLoad : MonoBehaviour
             {
                 yield return null;
             }
+            SaveData.Instance.InitStartPosition();
+
             SaveData.Instance.FirstLoad = false;
         }
 
@@ -78,21 +89,8 @@ public class DataLoad : MonoBehaviour
         {
             yield return null;
         }
-        //while(SettingParser.Instance.LoadingCompletion == false)
-        //{
-        //    yield return null;
-        //}
-
-        SaveData.Instance.InitStageInfo();
+        
         SaveData.Instance.SetLoadedStage(level);
-
-        //타이틀로 이동 시 전부 삭제
-        //스테이지 이동 시 플레이어 좌표 변경
-        GameObject obj = GameObject.FindGameObjectWithTag("Player");
-        if(obj != null)
-        {
-            obj.transform.position = SaveData.Instance.GetStartPos(level);
-        }
         //다음 맵으로 넘어갈 때 Lantern TriggerStay가 작동안하는 현상 수정할 것
     }
 }

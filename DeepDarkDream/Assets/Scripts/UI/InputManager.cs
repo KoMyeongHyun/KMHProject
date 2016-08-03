@@ -88,8 +88,7 @@ public class InputManager : MonoBehaviour
         {
             return;
         }
-
-        if (Input.GetKeyDown(KeyCode.I))
+        else if (Input.GetKeyDown(KeyCode.I))
         {
             Debug.Log(inven.transform.position);
             openInven = !openInven;
@@ -122,23 +121,9 @@ public class InputManager : MonoBehaviour
 
     public void ChangeCursor()
     {
-        //Vector2 hotspot = new Vector2(handCursor.width * handHotSpot.x, handCursor.height * handHotSpot.y);
-        //Cursor.SetCursor(handCursor, hotspot, CursorMode.Auto);
-        //if (Cursor.visible == true)
-        //{
-        //    return;
-        //}
-
-        //        Cursor.visible = true;
     }
     public void HideCursor()
     {
-        //if(Cursor.visible == false)
-        //{
-        //    return;
-        //}
-
-        //        Cursor.visible = false;
     }
 
     public void ShowCatchItem(Item _item)

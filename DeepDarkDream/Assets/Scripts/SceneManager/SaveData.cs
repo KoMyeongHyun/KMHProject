@@ -54,7 +54,7 @@ public class SaveData
     {
         return stageInfo[_stage].startPos;
     }
-    public void InitStageInfo()
+    public void InitStartPosition()
     {
         Vector3 startPos = new Vector3();
         JsonData root = SettingParser.Instance.SettingData;
