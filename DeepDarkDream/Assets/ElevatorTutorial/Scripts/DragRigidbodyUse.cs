@@ -45,12 +45,17 @@ public class DragRigidbodyUse : MonoBehaviour
 	private GameObject objectHeld;
 	private bool isObjectHeld;
     private bool saveFreezeState;
+    private Transform saveOjbectHeld;
 	
 	void Start ()
     {
         objectHeld = null;
         isObjectHeld = false;
         saveFreezeState = false;
+
+        GameObject obj = new GameObject("Interact Rot Dummy");
+        obj.transform.SetParent(playerCam.transform, false);
+        saveOjbectHeld = obj.transform;
     }
 	
     void Update()
@@ -62,7 +67,7 @@ public class DragRigidbodyUse : MonoBehaviour
             if (isObjectHeld == false)
             {
                 //오브젝트 집기 시도
-                tryPickObject();
+                TryPickObject();
             }
             else
             {
@@ -70,14 +75,6 @@ public class DragRigidbodyUse : MonoBehaviour
             }
         }
     }
-
-	void FixedUpdate ()
-    {
-        if(isObjectHeld)
-        {
-            holdObject();
-        }
-	}
 
     private void TryDoorAction()
     {
@@ -97,7 +94,7 @@ public class DragRigidbodyUse : MonoBehaviour
         }
     }
 
-	private void tryPickObject()
+	private void TryPickObject()
     {
 		Ray playerAim = playerCam.GetComponent<Camera>().ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
 		RaycastHit hit;
@@ -130,40 +127,38 @@ public class DragRigidbodyUse : MonoBehaviour
                 {
                     rig.freezeRotation = false;
 				}
-				/**/
-				PickupRange = ObjectGrab.m_PickupRange; 
+                saveOjbectHeld.rotation = objectHeld.transform.rotation;
+                /**/
+                PickupRange = ObjectGrab.m_PickupRange; 
 				ThrowStrength = ObjectGrab.m_ThrowStrength;
 				distance = ObjectGrab.m_distance;
 				maxDistanceGrab = ObjectGrab.m_maxDistanceGrab;
+
+                StartCoroutine(HoldObject());
                 return;
             }
 		}
         TryDoorAction();
     }
-	
-	private void holdObject()
+
+	private IEnumerator HoldObject()
     {
-        //케릭터 회전에 따른 오브젝트 회전 처리할 것
-        Ray playerAim = playerCam.GetComponent<Camera>().ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        //Transform player = GameObject.FindGameObjectWithTag("Player").transform;
-        //Vector3 nextPos = player.position + new Vector3(0, 0.5f, 0) + player.forward * distance;
-
-        Vector3 nextPos = playerCam.transform.position + playerAim.direction * distance;
-        Vector3 currPos = objectHeld.transform.position;
-		
-		objectHeld.GetComponent<Rigidbody>().velocity = (nextPos - currPos) * 20;
-
-        //그대로 들어올린 후 플레이어가 회전하면 같이 회전
-        //float yRot = CrossPlatformInputManager.GetAxis("Mouse X")*2.0f;
-        //float xRot = CrossPlatformInputManager.GetAxis("Mouse Y");
-        //Quaternion e = Quaternion.Euler(-xRot, yRot, 0.0f);
-        //objectHeld.transform.Rotate(playerCam.transform.up, yRot);
-
-        objectHeld.transform.forward = playerCam.transform.forward;
-
-        if (Vector3.Distance(objectHeld.transform.position, playerCam.transform.position) > maxDistanceGrab)
+        while (isObjectHeld)
         {
-            DropObject();
+            Ray playerAim = playerCam.GetComponent<Camera>().ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+
+            Vector3 nextPos = playerCam.transform.position + playerAim.direction * distance;
+            Vector3 currPos = objectHeld.transform.position;
+            
+            objectHeld.GetComponent<Rigidbody>().velocity = (nextPos - currPos) * 20.0f;
+            objectHeld.GetComponent<Rigidbody>().MoveRotation(saveOjbectHeld.rotation);
+
+            if (Vector3.Distance(objectHeld.transform.position, playerCam.transform.position) > maxDistanceGrab)
+            {
+                DropObject();
+            }
+
+            yield return new WaitForFixedUpdate();
         }
 	}
 	
@@ -177,7 +172,7 @@ public class DragRigidbodyUse : MonoBehaviour
 	
     private void ThrowObject()
     {
-        objectHeld.GetComponent<Rigidbody>().AddForce(playerCam.transform.forward * ThrowStrength);
+        objectHeld.GetComponent<Rigidbody>().AddForce(playerCam.transform.forward * ThrowStrength, ForceMode.Impulse);
 		//objectHeld.GetComponent<Rigidbody>().freezeRotation = false;
 		objectHeld = null;
     }

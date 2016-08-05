@@ -35,6 +35,7 @@ public class DroppedItem : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             //아이템을 하나하나 먹을 수 있도록 마우스를 때면 초기화
+            //방식 바꿀 것
             inProgress = false;
         }
     }
