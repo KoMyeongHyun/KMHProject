@@ -49,24 +49,29 @@ public class Combat : State
 
         if (distance < 3.0f)
         {
-            //공격 모션을 시작하지 않았다면 플레이어를 바라보도록 한다.
-            if (monster.NavAgent.remainingDistance == 0.0f)
+            //공격 진행 중이라면 리턴
+            if (attackInfo.progress)
             {
-                Quaternion look = Quaternion.LookRotation((tarPos - objPos));
-                obj.transform.rotation = Quaternion.Lerp(obj.transform.rotation, look, Time.deltaTime * 3.0f);
+                return;
             }
-            
-            if (attackInfo.progress == false)
-            {
-                attackInfo.count = 1;
-                monster.AttackCheck.StartAttack();
 
-                monster.NavAgent.ResetPath();
-                ani.SetBool("walk", false);
-                ani.SetBool("attack", true);
+            tarPos.y = objPos.y;
+            Vector3 dest = (tarPos - objPos).normalized;
+            float permissionVal = Vector3.Dot(obj.transform.forward, dest);
+            if (permissionVal > 0.98f)
+            {
+                    attackInfo.count = 1;
+                    monster.NavAgent.ResetPath();
+                    monster.AttackCheck.StartAttack();
             }
-            
-            return;
+            else
+            {
+                if (ani.GetCurrentAnimatorStateInfo(0).IsName("Walk") == false)
+                {
+                    ani.SetBool("walk", true);
+                }
+                monster.NavAgent.SetDestination(tarPos);
+            }
         }
         else if(distance > 20.0f)
         {
@@ -79,12 +84,13 @@ public class Combat : State
             if (attackInfo.progress)
             {
                 monster.AttackCheck.EndAttack();
-                ani.SetBool("attack", false);
+                //ani.SetBool("attack", false);
                 ani.SetBool("walk", true);
             }
             else if (ani.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
             {
                 monster.NavAgent.SetDestination(tarPos);
+                monster.NavAgent.updatePosition = true;
             }
         }
     }
@@ -93,11 +99,13 @@ public class Combat : State
     {
         Debug.Log("공격 종료");
         monster.NavAgent.ResetPath();
+        monster.NavAgent.updatePosition = true;
         monster.CSRange.enabled = false;
         monster.Body.enabled = false;
 
         monster.AttackCheck.EndAttack();
         ani.SetBool("attack", false);
+        ani.SetBool("walk", false);
 
         monster.SetSoundDelay(monster.SoundDelay - 1);
     }

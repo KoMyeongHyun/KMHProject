@@ -20,6 +20,8 @@ public class MonsterAttackCheck : MonoBehaviour
     public void StartAttack()
     {
         attackInfo.progress = true;
+        ani.SetBool("walk", false);
+        ani.SetBool("attack", true);
 
         Debug.Log("공격 1번동작");
         StartCoroutine(ProceedAttack());
@@ -55,6 +57,8 @@ public class MonsterAttackCheck : MonoBehaviour
     public void EndAttack()
     {
         attackInfo.progress = false;
+        ani.SetBool("attack", false);
+        //ani.SetBool("walk", true);
         gameObject.GetComponent<BoxCollider>().enabled = false;
     }
 
