@@ -16,7 +16,6 @@ public class DroppedItem : MonoBehaviour
     private InputManager inputManager;
     private Transform cameraTrans;
     private UnityStandardAssets.Characters.FirstPerson.FirstPersonController fpc;
-    private static bool inProgress;
 
     public void Start()
     {
@@ -27,17 +26,6 @@ public class DroppedItem : MonoBehaviour
 
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         fpc = player.GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
-        inProgress = false;
-    }
-
-    public void Update()
-    {
-        if (Input.GetMouseButtonUp(0))
-        {
-            //아이템을 하나하나 먹을 수 있도록 마우스를 때면 초기화
-            //방식 바꿀 것
-            inProgress = false;
-        }
     }
 
     public void OnTriggerEnter(Collider col)
@@ -68,8 +56,8 @@ public class DroppedItem : MonoBehaviour
         if (Cast(col))
         {
             inputManager.ChangeCursor();
-
-            if (Input.GetMouseButtonDown(0) && inProgress == false)
+            
+            if(InputManager2.Instance.MouseButtonDown(INPUT_KIND.DROPPED_ITEM))
             {
                 Item item = ItemContainer.Instance.GetItem(itemID);
                 if (item == null)
@@ -79,7 +67,6 @@ public class DroppedItem : MonoBehaviour
                 item.ICON = itemIcon;
 
                 //아이템 습득
-                inProgress = true;
                 Debug.Log("item get");
                 //아이템 정보 넘겨주기
                 GameObject.FindGameObjectWithTag("Inventory").SendMessage("AddItem", item);

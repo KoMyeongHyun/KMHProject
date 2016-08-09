@@ -44,6 +44,7 @@ public class DragRigidbodyUse : MonoBehaviour
 	private Ray playerAim;
 	private GameObject objectHeld;
 	private bool isObjectHeld;
+    public bool IsObjectHeld { get { return isObjectHeld; } }
     private bool saveFreezeState;
     private Transform saveOjbectHeld;
 	
@@ -61,8 +62,9 @@ public class DragRigidbodyUse : MonoBehaviour
     void Update()
     {
         //스테이지 넘어가면 잡고 있는 오브젝트 놓기
+        //오브젝트를 들었을 경우 Player와 충돌 금지시키기
         //타격 받으면 오브젝트 놓기?
-        if (Input.GetButtonDown(GrabButton))
+        if (InputManager2.Instance.MouseButtonDown(INPUT_KIND.INTERACT))
         {
             if (isObjectHeld == false)
             {
@@ -76,30 +78,18 @@ public class DragRigidbodyUse : MonoBehaviour
         }
     }
 
-    private void TryDoorAction()
+    public bool CheckRay(out RaycastHit _hit)
     {
         Ray playerAim = playerCam.GetComponent<Camera>().ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        RaycastHit hit;
-        if(Physics.Raycast(playerAim, out hit, PickupRange))
-        {
-            if(hit.collider.tag == Tags.m_DoorsTag)
-            {
-                //조건 걸고 부모가 아니라면 자기자신으로
-                hit.collider.GetComponentInParent<Door2>().SendMessage("ChangeDoorState");
-            }
-            else if(hit.collider.tag == Tags.m_ChestTag)
-            {
-                hit.collider.GetComponent<Chest>().SendMessage("OpenChest");
-            }
-        }
+        int layerMask = 1 << 13 | 1 << 11;
+
+        return Physics.Raycast(playerAim, out _hit, PickupRange, layerMask);
     }
 
 	private void TryPickObject()
     {
-		Ray playerAim = playerCam.GetComponent<Camera>().ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-		RaycastHit hit;
-		
-		if (Physics.Raycast (playerAim, out hit, PickupRange))
+        RaycastHit hit;
+        if (CheckRay(out hit))
         {
 			objectHeld = hit.collider.gameObject;
 			if(hit.collider.tag == Tags.m_InteractTag)
@@ -135,10 +125,18 @@ public class DragRigidbodyUse : MonoBehaviour
 				maxDistanceGrab = ObjectGrab.m_maxDistanceGrab;
 
                 StartCoroutine(HoldObject());
-                return;
+                //return;
             }
-		}
-        TryDoorAction();
+            else if (hit.collider.tag == Tags.m_DoorsTag)
+            {
+                //조건 걸고 부모가 아니라면 자기자신으로
+                hit.collider.GetComponentInParent<Door2>().SendMessage("ChangeDoorState");
+            }
+            else if (hit.collider.tag == Tags.m_ChestTag)
+            {
+                hit.collider.GetComponent<Chest>().SendMessage("OpenChest");
+            }
+        }
     }
 
 	private IEnumerator HoldObject()

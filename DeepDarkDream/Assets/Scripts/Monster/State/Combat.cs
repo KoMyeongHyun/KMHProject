@@ -80,11 +80,10 @@ public class Combat : State
         }
         else
         {
-            //공격 중지 플레이어에게 접근하기
+            //공격 중지 후 걷기 상태가 되면 플레이어에게 접근하기
             if (attackInfo.progress)
             {
                 monster.AttackCheck.EndAttack();
-                //ani.SetBool("attack", false);
                 ani.SetBool("walk", true);
             }
             else if (ani.GetCurrentAnimatorStateInfo(0).IsName("Walk"))

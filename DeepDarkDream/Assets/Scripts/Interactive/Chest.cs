@@ -27,6 +27,9 @@ public class Chest : MonoBehaviour
         {
             openChest = true;
 
+            //layer 기본 값으로 변경
+            gameObject.layer = 0;
+            
             //프리팹으로 존재하고 동적으로 생성해줘야하는 오브젝트의 경우
             //id를 새로 생성된 아이템 id로 변경
             GameObject clone = Instantiate(item);
