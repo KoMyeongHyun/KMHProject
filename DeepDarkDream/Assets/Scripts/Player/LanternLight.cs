@@ -8,14 +8,6 @@ public class LanternLight : MonoBehaviour
     private float PENALRY_ENERGY;
     private float CONSUME_SPEED;
     private float CONSUME_POWER_ON;
-    //{
-    //    get
-    //    {
-    //        JsonData root = SettingParser.Instance.SettingData;
-    //        JsonData data = root["player"]["lantern"];
-    //        return float.Parse(data["consumePowerOn"].ToString());
-    //    }
-    //}
     private float PRIME_INTENSITY;
     private float SUB_INTENSITY;
 
@@ -26,7 +18,7 @@ public class LanternLight : MonoBehaviour
     public bool lightPower;
 
     private Animator ani;
-    //private Transform oilTrans;
+    private Transform oilTrans;
 
     //LanternLight()
     //{
@@ -56,11 +48,24 @@ public class LanternLight : MonoBehaviour
         lightPower = true;
 
         ani = gameObject.GetComponent<Animator>();
-        //oilTrans = GameObject.FindGameObjectWithTag("Oil").GetComponent<Transform>();
+
+        oilTrans = GameObject.FindGameObjectWithTag("Oil").GetComponent<Transform>();
         //ani.SetBool("penalty", false);
     }
 	
-	// Update is called once per frame
+    public void ReEnable()
+    {
+        StartCoroutine(ReEnableCollider());
+    }
+
+    //임시
+    IEnumerator ReEnableCollider()
+    {
+        this.GetComponent<SphereCollider>().enabled = false;
+        yield return new WaitForSeconds(1.0f);
+        this.GetComponent<SphereCollider>().enabled = true;
+    }
+
 	void Update ()
     {
         //에너지가 적으면 빛이 약해지거나 불규칙하게 깜빡이거나 추후
@@ -151,12 +156,13 @@ public class LanternLight : MonoBehaviour
             energy = MAX_ENERGY;
         }
 
-        //DisplayOil();
+        DisplayOil();
     }
 
-    //private void DisplayOil()
-    //{
-    //    float oilPos_x = OIL_IMG_SIZE - (energy * OIL_IMG_SIZE / MAX_ENERGY);
-    //    oilTrans.localPosition = new Vector3(oilPos_x, oilTrans.localPosition.y, oilTrans.localPosition.z);
-    //}
+    private void DisplayOil()
+    {
+        float OIL_IMG_SIZE = 234.4f;
+        float oilPos_x = OIL_IMG_SIZE - (energy * OIL_IMG_SIZE / MAX_ENERGY);
+        oilTrans.localPosition = new Vector3(oilPos_x, oilTrans.localPosition.y, oilTrans.localPosition.z);
+    }
 }

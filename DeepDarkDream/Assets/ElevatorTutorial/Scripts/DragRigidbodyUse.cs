@@ -118,6 +118,11 @@ public class DragRigidbodyUse : MonoBehaviour
                     rig.freezeRotation = false;
 				}
                 saveOjbectHeld.rotation = objectHeld.transform.rotation;
+                objectHeld.layer = 14;
+                for (int i = 0; i < objectHeld.transform.childCount; ++i)
+                {
+                    objectHeld.transform.GetChild(i).gameObject.layer = 14;
+                }
                 /**/
                 PickupRange = ObjectGrab.m_PickupRange; 
 				ThrowStrength = ObjectGrab.m_ThrowStrength;
@@ -163,7 +168,12 @@ public class DragRigidbodyUse : MonoBehaviour
     private void DropObject()
     {
 		isObjectHeld = false;
-		objectHeld.GetComponent<Rigidbody>().useGravity = true;
+        objectHeld.layer = 13;
+        for (int i = 0; i < objectHeld.transform.childCount; ++i)
+        {
+            objectHeld.transform.GetChild(i).gameObject.layer = 13;
+        }
+        objectHeld.GetComponent<Rigidbody>().useGravity = true;
         objectHeld.GetComponent<Rigidbody>().freezeRotation = saveFreezeState;
         objectHeld = null;
     }

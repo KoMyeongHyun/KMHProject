@@ -9,11 +9,11 @@ public class PlayerCondition : MonoBehaviour
     private float lacklustreTime;
 
     private Transform staminaTrans;
-    public const float STAMINA_IMG_SIZE = 237.0f;
+    public const float STAMINA_IMG_SIZE = 236.7f;
 
     //private Image mentalityImage;
     private Transform mentalityTrans;
-    public const float MENTALITY_IMG_SIZE = 90.0f;
+    public const float MENTALITY_IMG_SIZE = 98.1f;
 
     [SerializeField]
     private GameObject beShot;
@@ -150,6 +150,7 @@ public class PlayerCondition : MonoBehaviour
         //화면에 피격 표시 해주기
         GameObject bs = Instantiate(beShot);
         bs.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").GetComponent<Transform>());
+        bs.transform.SetAsFirstSibling();
         bs.GetComponent<RectTransform>().localPosition = new Vector3(0.0f, 0.0f, 0.0f);
         Vector2 ratio = bs.transform.parent.GetComponent<CanvasSizeControl>().Ratio;
         bs.GetComponent<RectTransform>().localScale = ratio;
@@ -157,9 +158,4 @@ public class PlayerCondition : MonoBehaviour
         //화면 흔들어 주기
         gameObject.SendMessage("OnBeShotWave");
     }
-
-    //void OnGUI()
-    //{
-        //GUI.TextField(new Rect(1000, 500, 100, 20), stamina.CurrentStamina + " / " + stamina.MaxStaminaOfSpirit);
-    //}
 }

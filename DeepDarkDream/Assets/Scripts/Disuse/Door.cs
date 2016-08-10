@@ -9,7 +9,7 @@ public class Door : MonoBehaviour
     [SerializeField] private string keyName;
     [SerializeField] private bool openedDoor;
 
-    private InputManager inputManager;
+    //private InputManager inputManager;
     private Transform cameraTrans;
     private Inventory inven;
     private float startAngle;
@@ -28,7 +28,7 @@ public class Door : MonoBehaviour
         float a = openedDoor ? openAngle : closeAngle;
         transform.localRotation = Quaternion.Euler(0.0f, a, 0.0f);
 
-        inputManager = GameObject.FindGameObjectWithTag("Canvas").GetComponent<InputManager>();
+        //inputManager = GameObject.FindGameObjectWithTag("Canvas").GetComponent<InputManager>();
         cameraTrans = GameObject.FindGameObjectWithTag("MainCamera").transform;
         inven = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>();
         startAngle = 0.0f;
@@ -79,7 +79,7 @@ public class Door : MonoBehaviour
             //플레이어가 문을 가리킬 경우
             if (Cast(col))
             {
-                inputManager.ChangeCursor();
+                //inputManager.ChangeCursor();
 
                 if (Input.GetMouseButtonDown(0))
                 {
@@ -115,7 +115,7 @@ public class Door : MonoBehaviour
             }
             else
             {
-                inputManager.HideCursor();
+                //inputManager.HideCursor();
             }
 
         }
@@ -124,7 +124,7 @@ public class Door : MonoBehaviour
     public void OnTriggerExit(Collider col)
     {
         //커서 없애기
-        inputManager.HideCursor();
+        //inputManager.HideCursor();
     }
 
     private bool Cast(Collider col)

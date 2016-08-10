@@ -66,7 +66,7 @@ public class CrosshairGUI : MonoBehaviour
         }
 
         //아이템창이나 catch창 켜져 있으면 둘다 false
-        if (inputManager.OpenInven || inputManager.ActiveCatchInfo || inputManager.ActiveCatchRecord)
+        if (InputManager2.Instance.OpenInven || inputManager.ActiveCatchInfo || inputManager.ActiveCatchRecord)
         {
             m_DefaultReticle = false;
             m_UseReticle = false;

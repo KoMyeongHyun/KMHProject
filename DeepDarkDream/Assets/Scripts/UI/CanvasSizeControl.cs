@@ -29,10 +29,14 @@ public class CanvasSizeControl : MonoBehaviour
         float x = Screen.width / (float)STANDARD_SIZE.WIDTH;
         float y = Screen.height / (float)STANDARD_SIZE.HEIGHT;
         ratio = new Vector2(x, y);
-        
+
         for (int i = 0; i < transform.childCount; ++i)
         {
             transform.GetChild(i).localScale = ratio;
+
+            x = transform.GetChild(i).localPosition.x * ratio.x;
+            y = transform.GetChild(i).localPosition.y * ratio.y;
+            transform.GetChild(i).localPosition = new Vector2(x, y);
         }
     }
 }

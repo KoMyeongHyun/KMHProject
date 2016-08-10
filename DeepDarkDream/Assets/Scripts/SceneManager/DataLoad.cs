@@ -52,6 +52,8 @@ public class DataLoad : MonoBehaviour
         if (obj != null)
         {
             obj.transform.position = SaveData.Instance.GetStartPos(level);
+            GameObject.FindGameObjectWithTag("LanternLight")
+                .GetComponent<LanternLight>().ReEnable();
         }
 
         //자원 로딩 완료 시

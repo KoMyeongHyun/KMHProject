@@ -13,19 +13,13 @@ public class DroppedItem : MonoBehaviour
     }
 
     private ItemOutline outline;
-    private InputManager inputManager;
     private Transform cameraTrans;
-    private UnityStandardAssets.Characters.FirstPerson.FirstPersonController fpc;
 
     public void Start()
     {
         outline = transform.GetChild(1).GetComponent<ItemOutline>();
-
-        inputManager = GameObject.FindGameObjectWithTag("Canvas").GetComponent<InputManager>();
+        
         cameraTrans = GameObject.FindGameObjectWithTag("MainCamera").transform;
-
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        fpc = player.GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
     }
 
     public void OnTriggerEnter(Collider col)
@@ -42,21 +36,9 @@ public class DroppedItem : MonoBehaviour
         {
             return;
         }
-
-        //툴팁이 켜져있거나 아이템창을 열고 있는 상황
-        //플레이어 상태 설정으로 해결할 것
-        bool catchInfo = inputManager.ActiveCatchInfo;
-        bool catchRecord = inputManager.ActiveCatchRecord;
-        if (catchInfo || catchRecord || fpc.StopBehavior)
+        else if (Cast(col))
         {
-            //inputManager.HideCursor();
-            return;
-        }
-
-        if (Cast(col))
-        {
-            inputManager.ChangeCursor();
-            
+            //inputManager.ChangeCursor();
             if(InputManager2.Instance.MouseButtonDown(INPUT_KIND.DROPPED_ITEM))
             {
                 Item item = ItemContainer.Instance.GetItem(itemID);
@@ -70,22 +52,21 @@ public class DroppedItem : MonoBehaviour
                 Debug.Log("item get");
                 //아이템 정보 넘겨주기
                 GameObject.FindGameObjectWithTag("Inventory").SendMessage("AddItem", item);
-                inputManager.HideCursor();
+                //inputManager.HideCursor();
                 Destroy(gameObject);
             }
         }
-        else
-        {
+        //else
+        //{
             //하나라도 트루면 지우지 말 것
-            inputManager.HideCursor();
-        }
+            //inputManager.HideCursor();
+        //}
     }
 
     public void OnTriggerExit(Collider col)
     {
         //커서 없애기
-        inputManager.HideCursor();
-
+        //inputManager.HideCursor();
         if (col.tag == "Player")
         {
             outline.SetOutline(0);

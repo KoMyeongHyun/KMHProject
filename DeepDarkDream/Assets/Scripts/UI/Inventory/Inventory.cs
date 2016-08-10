@@ -39,6 +39,8 @@ public class Inventory : MonoBehaviour
             x = initX;
             y -= interval;
         }
+
+        tooltip.transform.SetAsLastSibling();
     }
 
     void OnDestory()

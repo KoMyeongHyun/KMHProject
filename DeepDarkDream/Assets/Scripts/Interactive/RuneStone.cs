@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityStandardAssets.Characters.FirstPerson;
 using System.Collections;
 
 public class RuneStone : MonoBehaviour
@@ -7,15 +8,16 @@ public class RuneStone : MonoBehaviour
     private float delayTime;
     [SerializeField]
     private float invincibleTime;
+
     private bool available;
 
-    private UnityStandardAssets.Characters.FirstPerson.FirstPersonController player;
+    private FirstPersonController player;
 
     void Start()
     {
         available = true;
 
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>();
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<FirstPersonController>();
     }
 
     public void OnTriggerStay(Collider col)
@@ -24,11 +26,10 @@ public class RuneStone : MonoBehaviour
         {
             return;
         }
-
-        if (Input.GetButtonDown("Fire1") && available)
+        else if (InputManager2.Instance.MouseButtonDown(INPUT_KIND.RUNE_STONE) 
+            && available)
         {
             //효과 발동
-            //GameObject.FindGameObjectWithTag("Player").SendMessage("TouchRune", invincibleTime);
             StartCoroutine(InvincibleEffect(invincibleTime));
             StartCoroutine(DelayedStone());
         }

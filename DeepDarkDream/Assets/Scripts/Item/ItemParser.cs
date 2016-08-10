@@ -74,8 +74,9 @@ public class ItemParser : Parser
                 ItemType type = (ItemType)Enum.Parse(typeof(ItemType), type_str, true);
                 string targetName = child.Attributes.GetNamedItem("targetName").Value;
                 string funcName = child.Attributes.GetNamedItem("funcName").Value;
-                float effect = float.Parse(child.Attributes.GetNamedItem("effect").Value);
-
+                string effect_str = child.Attributes.GetNamedItem("effect").Value;
+                float effect = ( effect_str == "" ? 0 : float.Parse(effect_str) );
+                
                 //Hashtable info = new Hashtable();
                 Dictionary<string, object> info = new Dictionary<string, object>();
                 info.Add("id", id);
