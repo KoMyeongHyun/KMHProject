@@ -57,7 +57,9 @@ public class CatchRecord : MonoBehaviour
                 break;
             }
         }
-        
+
+        InputManager2.Instance.SwitchFlag(UI_KIND.CATCH_INFO);
+
         gameObject.SetActive(false);
     }
 }

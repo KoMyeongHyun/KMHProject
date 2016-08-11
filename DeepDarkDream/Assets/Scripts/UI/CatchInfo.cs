@@ -27,6 +27,8 @@ public class CatchInfo : MonoBehaviour
             yield return null;
         }
 
+        InputManager2.Instance.SwitchFlag(UI_KIND.CATCH_INFO);
+
         gameObject.SetActive(false);
     }
 }

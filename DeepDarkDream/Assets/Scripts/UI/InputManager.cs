@@ -13,10 +13,8 @@ public class InputManager : MonoBehaviour
 
     [SerializeField]
     private GameObject catchInfo;
-    public bool ActiveCatchInfo { get { return catchInfo.activeSelf; } }
     [SerializeField]
     private GameObject catchRecord;
-    public bool ActiveCatchRecord { get { return catchRecord.activeSelf; } }
 
     void Start()
     {
@@ -27,6 +25,8 @@ public class InputManager : MonoBehaviour
 
     public void ShowCatchItem(Item _item)
     {
+        InputManager2.Instance.SwitchFlag(UI_KIND.CATCH_INFO);
+
         switch(_item.TYPE)
         {
             case ItemType.RECORD:

@@ -39,7 +39,7 @@ public class DroppedItem : MonoBehaviour
         else if (Cast(col))
         {
             //inputManager.ChangeCursor();
-            if(InputManager2.Instance.MouseButtonDown(INPUT_KIND.DROPPED_ITEM))
+            if(InputManager2.Instance.MouseButtonDown(UI_NONE_INPUT_KIND.DROPPED_ITEM))
             {
                 Item item = ItemContainer.Instance.GetItem(itemID);
                 if (item == null)

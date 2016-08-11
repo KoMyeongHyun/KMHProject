@@ -15,7 +15,7 @@ public class CrosshairGUI : MonoBehaviour
     public LayerMask LayerInteract;
 
     public bool m_ShowCursor = false;
-    public bool CursorButton;
+    //public bool CursorButton;
 
     private bool m_DefaultReticle = true;
     private bool m_UseReticle;
@@ -23,8 +23,6 @@ public class CrosshairGUI : MonoBehaviour
     private Rect m_crosshairRect;
     private Ray playerAim;
     private Camera playerCam;
-    private InputManager inputManager;
-    //private Inventory inven;
 
     void Awake()
     {
@@ -43,9 +41,6 @@ public class CrosshairGUI : MonoBehaviour
                                   m_useTexture.width,
                                   m_useTexture.height);
         }
-
-        inputManager = GameObject.FindGameObjectWithTag("Canvas").GetComponent<InputManager>();
-        //inven = GameObject.FindGameObjectWithTag("Inventory").GetComponent<Inventory>();
     }
 
     void Update()
@@ -66,27 +61,27 @@ public class CrosshairGUI : MonoBehaviour
         }
 
         //아이템창이나 catch창 켜져 있으면 둘다 false
-        if (InputManager2.Instance.OpenInven || inputManager.ActiveCatchInfo || inputManager.ActiveCatchRecord)
+        if ( (InputManager2.Instance.Flag != (int)UI_KIND.NONE) )
         {
             m_DefaultReticle = false;
             m_UseReticle = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape) && CursorButton)
-        {
-            m_ShowCursor = !m_ShowCursor;
-        }
+        //if (Input.GetKeyDown(KeyCode.Escape) && CursorButton)
+        //{
+        //    m_ShowCursor = !m_ShowCursor;
+        //}
 
-        if (m_ShowCursor)
-        {
-            //Cursor.visible = (true);
-            //Cursor.lockState = CursorLockMode.None;
-        }
-        else
-        {
-            //Cursor.visible = (false);
-            //Cursor.lockState = CursorLockMode.Locked;
-        }
+        //if (m_ShowCursor)
+        //{
+        //    Cursor.visible = (true);
+        //    Cursor.lockState = CursorLockMode.None;
+        //}
+        //else
+        //{
+        //    Cursor.visible = (false);
+        //    Cursor.lockState = CursorLockMode.Locked;
+        //}
     }
 
     void OnGUI()

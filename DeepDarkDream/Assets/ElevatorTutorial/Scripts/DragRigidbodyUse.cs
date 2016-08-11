@@ -64,7 +64,7 @@ public class DragRigidbodyUse : MonoBehaviour
         //스테이지 넘어가면 잡고 있는 오브젝트 놓기
         //오브젝트를 들었을 경우 Player와 충돌 금지시키기
         //타격 받으면 오브젝트 놓기?
-        if (InputManager2.Instance.MouseButtonDown(INPUT_KIND.INTERACT))
+        if (InputManager2.Instance.MouseButtonDown(UI_NONE_INPUT_KIND.INTERACT))
         {
             if (isObjectHeld == false)
             {

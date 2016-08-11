@@ -81,15 +81,17 @@ public class Combat : State
         else
         {
             //공격 중지 후 걷기 상태가 되면 플레이어에게 접근하기
-            if (attackInfo.progress)
+            if (attackInfo.progress == false)
             {
-                monster.AttackCheck.EndAttack();
-                ani.SetBool("walk", true);
-            }
-            else if (ani.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
-            {
-                monster.NavAgent.SetDestination(tarPos);
-                monster.NavAgent.updatePosition = true;
+                if(ani.GetCurrentAnimatorStateInfo(0).IsName("Walk") == false)
+                {
+                    ani.SetBool("walk", true);
+                }
+                else
+                {
+                    monster.NavAgent.SetDestination(tarPos);
+                    monster.NavAgent.updatePosition = true;
+                }
             }
         }
     }

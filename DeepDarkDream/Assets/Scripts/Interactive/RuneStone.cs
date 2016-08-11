@@ -26,7 +26,7 @@ public class RuneStone : MonoBehaviour
         {
             return;
         }
-        else if (InputManager2.Instance.MouseButtonDown(INPUT_KIND.RUNE_STONE) 
+        else if (InputManager2.Instance.MouseButtonDown(UI_NONE_INPUT_KIND.RUNE_STONE) 
             && available)
         {
             //효과 발동

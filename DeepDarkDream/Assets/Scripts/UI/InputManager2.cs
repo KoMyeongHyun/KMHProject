@@ -3,8 +3,21 @@ using UnityEngine.SceneManagement;
 using UnityStandardAssets.Characters.FirstPerson;
 using System.Collections;
 
-public enum INPUT_KIND
-{ DROPPED_ITEM, INTERACT, RUNE_STONE, COUNT }
+public enum UI_KIND
+{
+    NONE = 0x1 << 0,
+    CATCH_INFO = 0x1 << 1,
+    INVENTORY = 0x1 << 2,
+    PAUSE = 0x1 << 3
+}
+
+public enum UI_NONE_INPUT_KIND
+{
+    DROPPED_ITEM,
+    INTERACT,
+    RUNE_STONE,
+    COUNT
+}
 
 public class InputManager2 : MonoBehaviour
 {
@@ -22,6 +35,21 @@ public class InputManager2 : MonoBehaviour
             return instance;
         }
     }
+    
+    private int flag;
+    public int Flag
+    {
+        set { flag = value; }
+        get { return flag; }
+    }
+    public void SwitchFlag(UI_KIND _UIKind)
+    {
+        flag ^= (int)_UIKind;
+        if(flag == 0)
+        {
+            flag = (int)UI_KIND.NONE;
+        }
+    }
 
     //클래스명, 변수명 바꿀 것
     private InputManager assistance;
@@ -29,8 +57,6 @@ public class InputManager2 : MonoBehaviour
     private GameObject inven;
     private Vector3 invenPos;
     private Vector3 hideInvenPos;
-    private bool openInven;
-    public bool OpenInven { get { return openInven; } }
 
     private delegate bool ClickEvent();
     private ClickEvent[] clickEvent;
@@ -40,20 +66,21 @@ public class InputManager2 : MonoBehaviour
 
     private void Awake()
     {
+        flag = (int)UI_KIND.NONE;
+
         assistance = GameObject.FindGameObjectWithTag("Canvas").GetComponent<InputManager>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<FirstPersonController>();
         inven = GameObject.FindGameObjectWithTag("Inventory");
         invenPos = new Vector3(Screen.width * 0.65f, Screen.height * 0.5f);
         hideInvenPos = new Vector3(5000.0f, 5000.0f);
         inven.transform.position = hideInvenPos;
-        openInven = false;
 
         HideCursor();
 
-        clickEvent = new ClickEvent[(int)INPUT_KIND.COUNT];
-        clickEvent[(int)INPUT_KIND.DROPPED_ITEM] = ClickForItemPickUp;
-        clickEvent[(int)INPUT_KIND.INTERACT] = ClickForInteract;
-        clickEvent[(int)INPUT_KIND.RUNE_STONE] = ClickForItemPickUp;
+        clickEvent = new ClickEvent[(int)UI_NONE_INPUT_KIND.COUNT];
+        clickEvent[(int)UI_NONE_INPUT_KIND.DROPPED_ITEM] = ClickForItemPickUp;
+        clickEvent[(int)UI_NONE_INPUT_KIND.INTERACT] = ClickForInteract;
+        clickEvent[(int)UI_NONE_INPUT_KIND.RUNE_STONE] = ClickForItemPickUp;
 
         dragUse = GameObject.FindGameObjectWithTag("Player").GetComponent<DragRigidbodyUse>();
         inProgress = false;
@@ -64,6 +91,27 @@ public class InputManager2 : MonoBehaviour
         do
         {
             yield return null;
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                //Esc 클릭에 대한 처리 추가
+                //인터페이스 켜진 순서대로 닫아 주어야 하는지
+                //기존 정렬 순서대로 닫아줄지
+            }
+
+            if ( Input.GetKeyDown(KeyCode.P) )
+            {
+                //일시정지
+                //각종 예외 처리 필요, 타격 도중일 때 등
+                if(Time.timeScale == 0)
+                {
+                    Time.timeScale = 1;
+                }
+                else
+                {
+                    Time.timeScale = 0;
+                }
+            }
 
             if (Input.GetKeyDown(KeyCode.Tab))
             {
@@ -87,16 +135,17 @@ public class InputManager2 : MonoBehaviour
                 SceneManager.LoadScene("Title");
             }
 
-            if (assistance.ActiveCatchInfo || assistance.ActiveCatchRecord)
+            //제한 조건은 요구에 따라 유동적으로 변화시킬 것
+            if ((flag & (int)UI_KIND.CATCH_INFO) != 0)
             {
                 continue;
             }
             else if (Input.GetKeyDown(KeyCode.I))
             {
                 Debug.Log(inven.transform.position);
-                openInven = !openInven;
+                SwitchFlag(UI_KIND.INVENTORY);
 
-                if (openInven)
+                if ( (flag & (int)UI_KIND.INVENTORY) != 0 )
                 {
                     ShowCursor();
                     player.setStopBehavior(true);
@@ -113,18 +162,16 @@ public class InputManager2 : MonoBehaviour
         } while (true);
     }
 
-    public bool MouseButtonDown(INPUT_KIND _kind)
+    public bool MouseButtonDown(UI_NONE_INPUT_KIND _kind)
     {
         //무엇이 먼저 호출 되든지 상관 없어야 한다.
         //문열기나 오브젝트를 들었다 놓는 것이 우선순위가 더 높다
-        if (openInven
-            || assistance.ActiveCatchInfo 
-            || assistance.ActiveCatchRecord)
+        if ( (flag != (int)UI_KIND.NONE) )
         {
             return false;
         }
 
-        //인게임 마우스 클릭 상황
+        //UI NONE 마우스 클릭 상황
         int kind = (int)_kind;
         return clickEvent[kind]();
     }
