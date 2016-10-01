@@ -31,6 +31,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         [SerializeField] private LerpControlledBob m_JumpBob = new LerpControlledBob();
         [SerializeField] private float m_StepInterval;
         [SerializeField] private AudioClip[] m_FootstepSounds;    // an array of footstep sounds that will be randomly selected from.
+        [SerializeField] private AudioClip[] m_ClimbstepSounds;
         [SerializeField] private AudioClip m_JumpSound;           // the sound played when character leaves the ground.
         [SerializeField] private AudioClip m_LandSound;           // the sound played when character touches back on ground.
 
@@ -72,6 +73,13 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private bool invincible;
         public bool Invincible { get; set; }
 
+        private bool onLadder;
+        private bool escapeLadder;
+        //private GameObject ladderObj;
+        private float ladderSoundTime;
+        private const float CLIMB_SPEED = 3.0f;
+        private const float CLIMB_THRESHOLD = -0.4f;
+
 
         //private SphereCollider soundRange;
 
@@ -101,6 +109,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
             knockback = false;
             invincible = false;
 
+            onLadder = false;
+            escapeLadder = false;
+            //ladderObj = null;
+            ladderSoundTime = 0.0f;
+
             DontDestroyOnLoad(this);
         }
 
@@ -118,6 +131,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             if (!m_Jump)
             {
                 m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
+                //m_Jump = Input.GetKey(KeyCode.Space);
             }
 
             if (!m_PreviouslyGrounded && m_CharacterController.isGrounded)
@@ -154,6 +168,13 @@ namespace UnityStandardAssets.Characters.FirstPerson
             if (stopBehavior || stopMove)
             {
                 speed = 0.0f;
+            }
+
+            if(onLadder)
+            {
+                LadderUpdate();
+                UpdateCameraPosition(speed);
+                return;
             }
 
             // always move along the camera forward as it is the direction that it being aimed at
@@ -249,6 +270,15 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_FootstepSounds[0] = m_AudioSource.clip;
         }
 
+        private void PlayLadderClimbAudio()
+        {
+            int n = Random.Range(1, m_ClimbstepSounds.Length);
+            m_AudioSource.clip = m_ClimbstepSounds[n];
+            m_AudioSource.PlayOneShot(m_AudioSource.clip);
+            m_ClimbstepSounds[n] = m_ClimbstepSounds[0];
+            m_ClimbstepSounds[0] = m_AudioSource.clip;
+            ladderSoundTime = Time.time + 0.5f;
+        }
 
         private void UpdateCameraPosition(float speed)
         {
@@ -273,6 +303,52 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_Camera.transform.localPosition = newCameraPosition;
         }
 
+        private void LadderUpdate()
+        {
+            run = false;
+
+            Vector3 vertical = Vector3.up.normalized;
+            vertical *= Input.GetAxis("Vertical");
+            float camDirHeight = m_Camera.transform.forward.y;
+            vertical *= (camDirHeight > CLIMB_THRESHOLD ? 1.0f : -1.0f);
+
+            Vector3 lateral = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
+            lateral = transform.TransformDirection(lateral);
+
+            Vector3 movement = vertical + lateral;
+            m_CharacterController.Move(movement * CLIMB_SPEED * Time.deltaTime);
+
+            if(Input.GetAxis("Vertical") == 1.0f && m_AudioSource.isPlaying == false
+                && ladderSoundTime < Time.time)
+            {
+                PlayLadderClimbAudio();
+            }
+
+            if(m_Jump)
+            {
+                onLadder = false;
+                escapeLadder = true;
+                //ladderObj = null;
+
+                m_Jump = false;
+                m_Jumping = false;
+                m_MoveDir.y = 0.0f;
+
+                StartCoroutine(ExitLadder());
+            }
+        }
+
+        private IEnumerator ExitLadder()
+        {
+            while(m_CharacterController.isGrounded == false)
+            {
+                escapeLadder = true;
+                yield return null;
+            }
+
+            onLadder = false;
+            escapeLadder = false;
+        }
 
         private void GetInput(out float speed)
         {
@@ -456,6 +532,28 @@ namespace UnityStandardAssets.Characters.FirstPerson
             }
             
             body.AddForceAtPosition(m_CharacterController.velocity * 0.1f, hit.point, ForceMode.Impulse);
+        }
+
+        private void OnTriggerStay(Collider _col)
+        {
+            if(_col.tag == "Ladder" && escapeLadder == false)
+            {
+                onLadder = true;
+                //ladderObj = _col.gameObject;
+
+                m_Jumping = false;
+                m_MoveDir.y = 0.0f;
+            }
+        }
+
+        private void OnTriggerExit(Collider _col)
+        {
+            if(_col.tag == "Ladder" && escapeLadder == false)
+            {
+                onLadder = false;
+                escapeLadder = false;
+                //ladderObj = null;
+            }
         }
     }
 }
