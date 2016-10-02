@@ -114,7 +114,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
             //ladderObj = null;
             ladderSoundTime = 0.0f;
 
-            DontDestroyOnLoad(this);
+            //DontDestroyOnLoad(this);
+			DontDestroyOnLoad(transform.parent);
         }
 
 

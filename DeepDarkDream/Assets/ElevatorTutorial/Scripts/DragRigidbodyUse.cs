@@ -54,7 +54,7 @@ public class DragRigidbodyUse : MonoBehaviour
         isObjectHeld = false;
         saveFreezeState = false;
 
-        GameObject obj = new GameObject("Interact Rot Dummy");
+        GameObject obj = new GameObject("InteractRotDummy");
         obj.transform.SetParent(playerCam.transform, false);
         saveOjbectHeld = obj.transform;
     }
